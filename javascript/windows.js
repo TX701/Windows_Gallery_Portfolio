@@ -232,37 +232,39 @@ const gallerySetUp = async (num, folder) => {
   let prevImg = "";
   let amt = 0;
 
-  gallery.filter((gallery) => gallery.filter == folder.charAt(0).toUpperCase()).forEach((element) => {
-    let fileName = (element.file != "Game_Pitch") ? `thumbnails/TB${element.file}.jpg` : "originals/Game_Pitch.png";
+  gallery.filter((gallery) => gallery.file == folder.charAt(0).toUpperCase()).forEach((element) => {
+    let name = element.file.substring(0, element.file.indexOf("."));
 
-    let imgHTML = ` <div class="gall-icon" id="${element.file}-icon">
+    let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
+
+    let imgHTML = ` <div class="gall-icon" id="${name}-icon">
                       <div class="img-icon"><img src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
-                      <p>${element.file}.${element.ext}</p>
+                      <p>${element.file}</p>
                     </div>`;
 
     document.querySelector(`#gallery${num} .images`).insertAdjacentHTML("beforeend", imgHTML);
 
     // document.querySelector(`#gallery${num} #${element.file}-icon .img-icon`).style.backgroundImage = `url(./assets/gallery/${fileName})`;
 
-    document.querySelector(`#gallery${num} #${element.file}-icon`).addEventListener("click", () => {
-      document.querySelector(`#gallery${num} #${element.file}-icon p`).style.color = "#fff"; // change text to white
-      document.querySelector(`#gallery${num} #${element.file}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
-      // document.querySelector(`#gallery${num} #${element.file}-icon .img-icon`).style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 128, 0.5), rgba(0, 0, 128, 0.5)), url(./assets/gallery/${fileName})`;
+    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("click", () => {
+      document.querySelector(`#gallery${num} #${name}-icon p`).style.color = "#fff"; // change text to white
+      document.querySelector(`#gallery${num} #${name}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
+      // document.querySelector(`#gallery${num} #${name}-icon .img-icon`).style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 128, 0.5), rgba(0, 0, 128, 0.5)), url(./assets/gallery/${fileName})`;
 
-      document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>${element.file}.${element.ext}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
+      document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>$${element.file}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
 
       if (prevImg != "") {
-        let prevImgName = (prevImg.file != "Game_Pitch") ? `thumbnails/TB${prevImg.file}.jpg` : "originals/Game_Pitch.png";
-        document.querySelector(`#gallery${num} #${prevImg.file}-icon p`).style.color = "#000"; // make the previously selected images text go back to normal
-        document.querySelector(`#gallery${num} #${prevImg.file}-icon p`).style.background = ""; // set the previous images text background to nothing
+        let prevName = prevImg.file.substring(0, prevImg.file.indexOf("."));
+        document.querySelector(`#gallery${num} #${prevName}-icon p`).style.color = "#000"; // make the previously selected images text go back to normal
+        document.querySelector(`#gallery${num} #${prevName}-icon p`).style.background = ""; // set the previous images text background to nothing
         // document.querySelector(`#gallery${num} #${prevImg.file}-icon .img-icon`).style.backgroundImage = `url(./assets/gallery/${prevImgName})`; // get rid of the blue background filter
       }
 
       prevImg = element;
     });
 
-    document.querySelector(`#gallery${num} #${element.file}-icon`).addEventListener("dblclick", () => {
-      (prevImg.file != "Game_Pitch") ? imageWindow(element, getWindowTotal(element.file)) : gamePitchWindow(getWindowTotal("game"));
+    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", () => {
+      (prevImg.file != "Game_Pitch") ? imageWindow(element, getWindowTotal(name)) : gamePitchWindow(getWindowTotal("game"));
     });
 
     document.querySelector(`#gallery${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`;

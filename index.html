@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pf</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="module" src="./javascript/script.js" defer></script>
+    <script type="module" src="./javascript/windows.js" defer></script>
+    <script type="module" src="./javascript/data.js" defer></script>
+
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"rel="stylesheet"/>
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+
+    </head>
+  <body>
+    
+    <div id="all">
+      <div id="container">
+        <!-- windows -->
+        <div id="windows"></div>
+  
+        <!-- icons at the side of the background used to open new windows -->
+  
+        <div id="desktop-icons">
+          <div id="col-1">
+            <div class="icons" id="recycle-icon">
+              <img src="./assets/icons/recylce.png" alt="" draggable="false" />
+              <p>Recycle Bin</p>
+            </div>
+            <div class="icons" id="home-icon">
+              <img src="./assets/icons/home.png" alt="" draggable="false" />
+              <p>Home</p>
+            </div>
+            <div class="icons" id="about-icon">
+              <img src="./assets/icons/about.png" alt="" draggable="false" />
+              <p>About</p>
+            </div>
+            <div class="icons" id="minesweeper-icon">
+              <img src="./assets/icons/minesweeper.png" alt="" draggable="false" />
+              <p>Minesweeper</p>
+            </div>
+          </div>
+          <div id="col-2">
+            <div class="icons" id="gallery-icon-traditional">
+              <img src="./assets/icons/gallery.png" alt="" draggable="false" />
+              <p>Traditional</p>
+            </div>
+            <div class="icons" id="gallery-icon-digital">
+              <img src="./assets/icons/gallery.png" alt="" draggable="false" />
+              <p>Digital</p>
+            </div>
+            <div class="icons" id="gallery-icon-figure">
+              <img src="./assets/icons/gallery.png" alt="" draggable="false" />
+              <p>Figure</p>
+            </div>
+            <div class="icons" id="gallery-icon-game">
+              <img src="./assets/icons/gallery.png" alt="" draggable="false" />
+              <p>Game</p>
+            </div>
+          </div>
+          
+        </div>
+  
+      <!-- error for if the user is using a small screen width -->
+        <div id="notice">
+          <div class="topbar" id="notice-topbar">
+            <div class="left">
+              <h1>Error</h1>
+            </div>
+          </div>
+  
+          <div class="wrapper">
+            <img src="./assets/icons/error.png" alt="Image broken" />
+            <div>
+              <p>This website is incompatiable with your current screen size.</p>
+              <p>Please view this website on a device with a bigger width.</p>
+            </div>
+          </div>
+       </div>
+  
+      </div>
+      <!-- bottom bar -->
+      <div id="footer">
+        <div id="left">
+          <div id="start-menu-icon" class="tabs">
+            <img src="./assets/icons/icon.png" alt="" />
+            <p>Start</p>
+          </div>
+          <div id="window-tabs"></div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

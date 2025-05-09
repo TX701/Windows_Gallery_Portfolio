@@ -389,7 +389,7 @@ export const gamePitchHTML = (num) => {
                 </div>
               <div class="game-footer">
               <h2>Game_Pitch.pdf</h2>
-              <a href="./assets/PITCH_final.pdf" download><button>Download</button></a>
+              <a href="./assets/game_pitch/PITCH_final.pdf" download><button>Download</button></a>
               </div>
           </div>`;
 }

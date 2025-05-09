@@ -212,8 +212,10 @@ export const homeWindow = (num) => {
 };
 
 export const imageWindow = (image, num) => {
-  document.getElementById("windows").insertAdjacentHTML("beforeend", imageHTML(image, num));
-  windowSetUp(`${image.file}${num}`, `${image.file}.${image.ext}`);
+  let name = image.file.substring(0, image.file.indexOf("."));
+
+  document.getElementById("windows").insertAdjacentHTML("beforeend", imageHTML(name, image, num));
+  windowSetUp(`${name}`, `${image.file}`);
 };
 
 export const gamePitchWindow = (num) => {
@@ -232,7 +234,7 @@ const gallerySetUp = async (num, folder) => {
   let prevImg = "";
   let amt = 0;
 
-  gallery.filter((gallery) => gallery.file == folder.charAt(0).toUpperCase()).forEach((element) => {
+  gallery.filter((gallery) => gallery.file.charAt(0).toUpperCase() == folder.charAt(0).toUpperCase()).forEach((element) => {
     let name = element.file.substring(0, element.file.indexOf("."));
 
     let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
@@ -251,7 +253,7 @@ const gallerySetUp = async (num, folder) => {
       document.querySelector(`#gallery${num} #${name}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
       // document.querySelector(`#gallery${num} #${name}-icon .img-icon`).style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 128, 0.5), rgba(0, 0, 128, 0.5)), url(./assets/gallery/${fileName})`;
 
-      document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>$${element.file}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
+      document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>${element.file}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
 
       if (prevImg != "") {
         let prevName = prevImg.file.substring(0, prevImg.file.indexOf("."));

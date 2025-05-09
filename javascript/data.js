@@ -1,167 +1,134 @@
 // array for gallery items
 export const gallery = [
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "Game_Pitch.pdf",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "T1.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "T2.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D3.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D4.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F5.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F6.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D7.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D8.gif",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "T9.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "T10.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F11.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D12.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D13.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F14.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F15.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "T16.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D17.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F18.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D19.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F20.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F21.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "G4.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "G3.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "G2.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "G1.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F24.jpg",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F23.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F22.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F61.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "F60.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D35.png",
     },
     {
-      name: "Sample Name",
       description: "Consider putting meanings dates tools or classes here",
       file: "D34.png",
     },
@@ -202,20 +169,20 @@ export const homeHTML = (num) => {
                                 <p>Most windows will also have functions to minimize to the tray or expand to be bigger, these functions will be in the top left of a window.</p>`;
 
 
-export const imageHTML = (image, num) => {
-    return `<div class="image-window" id="${image.file}${num}">
-                <div class="topbar" id="${image.file}${num}-topbar">
+export const imageHTML = (name, image, num) => {
+    return `<div class="image-window" id="${name}${num}">
+                <div class="topbar" id="${name}${num}-topbar">
                 <div class="left">
-                    <h1>${image.file}.${image.ext}</h1>
+                    <h1>${image.file}</h1>
                 </div>
                 <div class="right">
-                    <img class="tray" draggable="false" id="${image.file}${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
-                    <img class="min" draggable="false" id="${image.file}${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
+                    <img class="tray" draggable="false" id="${name}${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
+                    <img class="min" draggable="false" id="${name}${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
 
-                    <img id="${image.file}${num}-exit" draggable="false"  src="./assets/icons/close-icon.png" alt="" />
+                    <img id="${name}${num}-exit" draggable="false"  src="./assets/icons/close-icon.png" alt="" />
                 </div>
                 </div>
-                <img src="./assets/gallery/originals/${image.file}.${image.ext}" alt="Broken Image" draggable="false">
+                <img src="./assets/gallery/originals/${image.file}" alt="Broken Image" draggable="false">
             </div>`;
 }
 

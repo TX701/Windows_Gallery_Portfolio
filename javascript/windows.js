@@ -65,7 +65,7 @@ export const draggableElement = (name) => {
                       10 + rect.top > recycle.bottom)
     
         if (overlap) {
-          document.getElementById(name).remove(); // when moving an icon- if you over lap with the recycle bin- remove the icon from the desktop
+          document.getElementById(name).remove(); // when moving an icon- if you overlap with the recycle bin- remove the icon from the desktop
         }
       }
     };

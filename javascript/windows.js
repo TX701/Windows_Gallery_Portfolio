@@ -39,7 +39,7 @@ export const draggableElement = (name) => {
     if (name.indexOf("icon") > 0 && windowDetails.get(name) == null) {
       windowDetails.set(name, {moveable: true, winHeight: document.getElementById(name).offsetHeight + "px", winWidth: document.getElementById(name).offsetWidth + "px"}); // add icon to details map
     }
-
+ 
     const moveElement = (e) => {
       if (windowDetails.get(name).moveable) {
         let currentX = e.clientX;
@@ -239,6 +239,8 @@ const gallerySetUp = async (num, folder) => {
 
     let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
 
+    console.log(fileName);
+
     let imgHTML = ` <div class="gall-icon" id="${name}-icon">
                       <div class="img-icon"><img src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
                       <p>${element.file}</p>
@@ -265,8 +267,12 @@ const gallerySetUp = async (num, folder) => {
       prevImg = element;
     });
 
-    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", () => {
-      (prevImg.file != "Game_Pitch") ? imageWindow(element, getWindowTotal(name)) : gamePitchWindow(getWindowTotal("game"));
+    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", (e) => {
+      if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) {
+        gamePitchWindow(getWindowTotal("game"));
+      } else {
+        imageWindow(element, getWindowTotal(name))
+      }
     });
 
     document.querySelector(`#gallery${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`;

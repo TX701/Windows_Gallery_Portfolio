@@ -559,10 +559,8 @@
 /* game pitch window */
 
 .game {
-  height: 80vh;
-  width: 90vw;
-
-  /* display: none; */
+  height: 100vh;
+  width: 100vw;
 
   border-top-color: var(--window-top-left);
   border-left-color: var(--window-top-left);

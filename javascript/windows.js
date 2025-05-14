@@ -101,7 +101,11 @@ const addToTaskBar = (name, type) => {
 
 // seperated as its own function some of the windows can be maximized on open
 const maximize = (name) => {
-  document.getElementById(name).style.height = `${document.getElementById("all").offsetHeight - document.getElementById("footer").offsetHeight}px`;
+  // let percent = (window.innerHeight - document.getElementById("footer").offsetHeight) / 100;
+  // console.log(document.getElementById(name).offsetHeight);
+  // console.log(percent);
+  document.getElementById(name).style.height = `100%`;
+  console.log(document.getElementById(name).offsetHeight);
   document.getElementById(name).style.width = "100%";
   document.getElementById(name).style.top = "0";
   document.getElementById(name).style.left = "0";
@@ -224,13 +228,16 @@ export const gamePitchWindow = (num) => {
   for (let i = 1; i < 18; i++) {
     let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
     document.querySelector(`#game${num} .game-container`).insertAdjacentHTML("beforeend", img);
+    
   }
+
+  // document.querySelector(`#game${num} .game-container`).style.height = document.querySelector(`#game${num} .game-container`).offsetHeight - document.querySelector(`#game${num} .game-footer`).offsetHeight;
 
   windowSetUp(`game${num}`, "game");
   maximize(`game${num}`);
 }
 
-const gallerySetUp = async (num, folder) => {
+const gallerySetUp = async (num, folder) => {``
   let prevImg = "";
   let amt = 0;
 
@@ -238,8 +245,6 @@ const gallerySetUp = async (num, folder) => {
     let name = element.file.substring(0, element.file.indexOf("."));
 
     let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
-
-    console.log(fileName);
 
     let imgHTML = ` <div class="gall-icon" id="${name}-icon">
                       <div class="img-icon"><img src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>

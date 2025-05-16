@@ -196,7 +196,7 @@
 
   position: absolute;
 
-  background-image: url(./assets/welcome.png);
+  /* background-image: url(./assets/welcome.png); */
   background-size: cover;
 }
 

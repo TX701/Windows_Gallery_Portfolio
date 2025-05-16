@@ -237,7 +237,7 @@ export const gamePitchWindow = (num) => {
   maximize(`game${num}`);
 }
 
-const gallerySetUp = async (num, folder) => {``
+const gallerySetUp = (num, folder) => {``
   let prevImg = "";
   let amt = 0;
 
@@ -247,7 +247,7 @@ const gallerySetUp = async (num, folder) => {``
     let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
 
     let imgHTML = ` <div class="gall-icon" id="${name}-icon">
-                      <div class="img-icon"><img src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
+                      <div class="img-icon"><img rel=preload src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
                       <p>${element.file}</p>
                     </div>`;
 
@@ -284,7 +284,7 @@ const gallerySetUp = async (num, folder) => {``
   });
 }
 
-export const galleryWindow = async (num, folder) => {
+export const galleryWindow = (num, folder) => {
   document.getElementById("windows").insertAdjacentHTML("beforeend", galleryHTML(num, folder));
   gallerySetUp(num, folder);
   windowSetUp(`gallery${num}`, "gallery");

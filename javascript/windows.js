@@ -80,7 +80,15 @@ const addToTaskBar = (name, type) => {
   let url = `<img src="./assets/icons/${type}.png" alt="Image Broken" />`;
 
   if (type.indexOf(".") > 0) {
-    url = `<img src="./assets/gallery/thumbnails/TB${name}.jpg" alt="Image Broken" />`;
+    let fileName = type
+
+    if (type.indexOf("gif") > 0) {
+      fileName = type.substring(0, type.indexOf("gif")) + "jpg"
+
+      console.log(fileName);
+    }
+
+    url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`;
   }
 
   let newTab = `<div class="tabs" id="${name}tab">
@@ -101,9 +109,6 @@ const addToTaskBar = (name, type) => {
 
 // seperated as its own function some of the windows can be maximized on open
 const maximize = (name) => {
-  // let percent = (window.innerHeight - document.getElementById("footer").offsetHeight) / 100;
-  // console.log(document.getElementById(name).offsetHeight);
-  // console.log(percent);
   document.getElementById(name).style.height = `100%`;
   console.log(document.getElementById(name).offsetHeight);
   document.getElementById(name).style.width = "100%";
@@ -211,7 +216,6 @@ export const homeWindow = (num) => {
     }
   });
   
-  
   windowSetUp(`home${num}`, "home");
 };
 
@@ -231,8 +235,6 @@ export const gamePitchWindow = (num) => {
     
   }
 
-  // document.querySelector(`#game${num} .game-container`).style.height = document.querySelector(`#game${num} .game-container`).offsetHeight - document.querySelector(`#game${num} .game-footer`).offsetHeight;
-
   windowSetUp(`game${num}`, "game");
   maximize(`game${num}`);
 }
@@ -244,7 +246,14 @@ const gallerySetUp = (num, folder) => {``
   gallery.filter((gallery) => gallery.file.charAt(0).toUpperCase() == folder.charAt(0).toUpperCase()).forEach((element) => {
     let name = element.file.substring(0, element.file.indexOf("."));
 
-    let fileName = (name != "Game_Pitch") ? `thumbnails/TB${name}.jpg` : "originals/Game_Pitch.png";
+    let fileName = `thumbnails/TB${element.file}`
+
+    if (name == "Game_Pitch") {
+      fileName = "originals/Game_Pitch.png";
+    } else if (element.file.indexOf("gif") > 0) {
+      fileName = `thumbnails/TB${name}.jpg`;
+      console.log(fileName);
+    }
 
     let imgHTML = ` <div class="gall-icon" id="${name}-icon">
                       <div class="img-icon"><img rel=preload src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
@@ -252,21 +261,17 @@ const gallerySetUp = (num, folder) => {``
                     </div>`;
 
     document.querySelector(`#gallery${num} .images`).insertAdjacentHTML("beforeend", imgHTML);
-
-    // document.querySelector(`#gallery${num} #${element.file}-icon .img-icon`).style.backgroundImage = `url(./assets/gallery/${fileName})`;
-
+ 
     document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("click", () => {
       document.querySelector(`#gallery${num} #${name}-icon p`).style.color = "#fff"; // change text to white
       document.querySelector(`#gallery${num} #${name}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
-      // document.querySelector(`#gallery${num} #${name}-icon .img-icon`).style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 128, 0.5), rgba(0, 0, 128, 0.5)), url(./assets/gallery/${fileName})`;
-
+      
       document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>${element.file}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
 
       if (prevImg != "") {
         let prevName = prevImg.file.substring(0, prevImg.file.indexOf("."));
         document.querySelector(`#gallery${num} #${prevName}-icon p`).style.color = "#000"; // make the previously selected images text go back to normal
         document.querySelector(`#gallery${num} #${prevName}-icon p`).style.background = ""; // set the previous images text background to nothing
-        // document.querySelector(`#gallery${num} #${prevImg.file}-icon .img-icon`).style.backgroundImage = `url(./assets/gallery/${prevImgName})`; // get rid of the blue background filter
       }
 
       prevImg = element;

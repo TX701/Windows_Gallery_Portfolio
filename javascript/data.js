@@ -132,6 +132,10 @@ export const gallery = [
       description: "Consider putting meanings dates tools or classes here",
       file: "D34.png",
     },
+    {
+      description: "Consider putting meanings dates tools or classes here",
+      file: "D123.png",
+    },
 ];
 
 export const homeHTML = (num) => {

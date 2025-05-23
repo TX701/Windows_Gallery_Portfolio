@@ -222,45 +222,6 @@
   margin-bottom: 1rem;
 }
 
-/* .home-content .information {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 2rem;
-}
-
-.home-content .information .menu {
-  width: 50%;
-}
-
-.home-content .information .menu .menu-item {
-  display: flex;
-  height: 2rem;
-}
-
-.home-content .information .menu p {
-  margin-left: 1rem;
-  margin-top: 1rem;
-  display: inline;
-  cursor: url("./assets/CursorP.cur"), auto;
-}
-
-.home-content .information .menu .contents {
-  padding: 0.2rem;
-  background: var(--window-bottom-right);
-  color: var(--window-top-left);
-}
-
-.home-content .information .menu-text {
-  margin-right: 1rem;
-  margin-top: 1rem;
-  width: 50%;
-}
-
-.home-content .information .menu-text p {
-  margin-bottom: 2rem;
-} */
-
 .home .home-footer {
   display: flex;
   align-items: center;

@@ -7,7 +7,7 @@ import { draggableElement } from "./windows.js"
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
 
-const getCookie = () => {
+const getCookie = () => { // gets the users page cookies
   let current = decodeURIComponent(document.cookie).split(';');
   for(let i = 0; i < current.length; i++) {
     let first = current[i];
@@ -15,7 +15,7 @@ const getCookie = () => {
       first = first.substring(1);
     }
     if (first.indexOf("popup=") == 0) {
-      return JSON.parse(first.substring(("popup=").length, first.length));
+      return JSON.parse(first.substring(("popup=").length, first.length)); // return the value for popup
     }
   } 
   return "";
@@ -67,6 +67,8 @@ document.getElementById("minesweeper-icon").addEventListener("dblclick", () => {
 const setUpIcons = () => {
   let locations = [];
 
+  // placing the icons in nice rows for the start but changing their display to absolute to allow them to be moved
+
   document.querySelectorAll(".icons").forEach(element => {
     let bodyRect = document.body.getBoundingClientRect();
     let elemRect = element.getBoundingClientRect();
@@ -75,9 +77,9 @@ const setUpIcons = () => {
   });
 
   locations.forEach(element => {
-    element.e.style.position = "absolute";
-    element.e.style.left = `${element.left}px`;
-    element.e.style.top = `${element.top}px`;
+    element.e.style.position = "absolute"; // changing display to absolute
+    element.e.style.left = `${element.left}px`; // setting the icons position back to its original position when its position was flex
+    element.e.style.top = `${element.top}px`; // setting the icons position back to its original position when its position was flex
 
     draggableElement(element.e.id);
   });
@@ -86,13 +88,13 @@ const setUpIcons = () => {
 const startUp = () => {
   popUp = getCookie();
 
-  if (popUp === "") {
+  if (popUp === "") { // if it is the users first time on the website set a cookie named popup to true
     document.cookie = `popup=true`; 
     popUp = getCookie();
   }
 
   if (popUp === true) {
-    homeWindow("");
+    homeWindow(""); // if popup is true open the home window
   }
 
   setUpIcons();

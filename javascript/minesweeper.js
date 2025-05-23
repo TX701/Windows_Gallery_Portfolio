@@ -1,6 +1,6 @@
-let windowNum = null;
+let windowNum = null; // number of minesweeper windows
 
-let timers = [];
+let timers = []; // array of minesweeper timers running
 
 const setUpArray = (colAmt, rowAmt, n) => {
     document.querySelector(`#minesweeper${windowNum} .grid`).innerHTML = ""; //reset grid
@@ -44,7 +44,7 @@ const setUpArray = (colAmt, rowAmt, n) => {
         tile.removeEventListener("contextmenu", setRightClick);
         tile.style.border = "1px #8a8b92 solid";
 
-        switch (Number(tile.value)) {
+        switch (Number(tile.value)) { // sets tile color depending on how many bombs it is touching
             case -1:
                 handleBombs(tile);
                 break;
@@ -251,6 +251,7 @@ const setUpArray = (colAmt, rowAmt, n) => {
     });
 }
 
+// starts timer
 const startTime = (element) => {
     let start = Date.now();
 
@@ -261,29 +262,29 @@ const startTime = (element) => {
 
         switch (delta.toString().length) {
             case 1:
-                element.innerHTML = `00${delta}`;
+                element.innerHTML = `00${delta}`; // if the time is 0-9
                 break;
             case 2:
-                element.innerHTML = `0${delta}`;
+                element.innerHTML = `0${delta}`; // if the time is 10-99
                 break;
             default:
-                element.innerHTML = `${delta}`;
+                element.innerHTML = `${delta}`; // if the time is over 99
                 break;
         }
 
-        if (998 < delta) {
+        if (998 < delta) { // if the time is over 999 stop the timer
             stopTime(windowNum);
         }
 
     }, 1000);
 
-    timers.push({number: windowNum, timer: timer});
+    timers.push({number: windowNum, timer: timer}); // add to timer array
 }
 
 export const stopTime = (stop) => {
     timers.forEach(element => {
-        if (element.number == stop) {
-            clearInterval(element.timer);
+        if (element.number == stop) { // get the corresponding timer from the array
+            clearInterval(element.timer); // stop it
         }
     });
 }

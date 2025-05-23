@@ -1,12 +1,20 @@
+/*
+images are shown in the assets folder
+the originals folder contains the high quality images that the user will see when clicking on a file to view
+the thumbnails folder contains low quality images that will be seen in the viewer
+the thumbnails should have the same name with TB in the front of the name
+for gifs the thumbnail should be a still jpg
+*/
+
 // array for gallery items
 export const gallery = [
     {
-      description: "Consider putting meanings dates tools or classes here",
-      file: "Game_Pitch.pdf",
+      description: "Consider putting meanings dates tools or classes here", 
+      file: "Game_Pitch.pdf", // this is a special case the thumbnail uses a PNG and opening this opens a series of images rather than just one
     },
     {
-      description: "Consider putting meanings dates tools or classes here",
-      file: "T1.jpg",
+      description: "Consider putting meanings dates tools or classes here", // any text youd like displayed with the image
+      file: "T1.jpg", // name of the file including its extension 
     },
     {
       description: "Consider putting meanings dates tools or classes here",
@@ -34,7 +42,7 @@ export const gallery = [
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D8.gif",
+      file: "D8.gif", 
     },
     {
       description: "Consider putting meanings dates tools or classes here",
@@ -138,7 +146,7 @@ export const gallery = [
     },
 ];
 
-export const homeHTML = (num) => {
+export const homeHTML = (num) => { // creates HTML for home page- each new instance will have a new id
     return `<div class="home" id="home${num}">
                 <div class="topbar" id="home${num}-topbar">
                 <div class="left">
@@ -160,20 +168,7 @@ export const homeHTML = (num) => {
             </div>`;
 }
 
-    export const homeText = `<p>Welcome.</p>
-                            <p>Please click the icons on the desktop to explore around.</p>
-                            <p>You can click on the menu to the left to learn more about each icon.</p>`;
-
-    export const iconsText = `<p>Each icon will open a different window.</p>
-                            <p>You will need to double click on an icon to open a new window.</p>
-                            <p>You may open multiple of the same window.</p>`;
-
-    export const windowsText = `<p>Windows work how you would expect.</p>
-                                <p>Open, close, and move them as you would like.</p>
-                                <p>Most windows will also have functions to minimize to the tray or expand to be bigger, these functions will be in the top left of a window.</p>`;
-
-
-export const imageHTML = (name, image, num) => {
+export const imageHTML = (name, image, num) => { // full window images that the user opens through gallery folders
     return `<div class="image-window" id="${name}${num}">
                 <div class="topbar" id="${name}${num}-topbar">
                 <div class="left">
@@ -190,7 +185,7 @@ export const imageHTML = (name, image, num) => {
             </div>`;
 }
 
-export const galleryHTML = (num, folder) => {
+export const galleryHTML = (num, folder) => { // showcases a series of images which the player can click on
     return `<div class="gallery" id="gallery${num}">
                 <div class="topbar" id="gallery${num}-topbar">
                 <div class="left">
@@ -247,7 +242,7 @@ export const galleryHTML = (num, folder) => {
             </div>`
 }
 
-export const gamePitchHTML = (num) => {
+export const gamePitchHTML = (num) => { // opens a series of images one after another to create the illusion of a PDF
   return `<div class="game" id="game${num}">
               <div class="topbar" id="game${num}-topbar">
               <div class="left">
@@ -298,7 +293,7 @@ export const gamePitchHTML = (num) => {
           </div>`;
 }
 
-export const aboutHTML = (num) => {
+export const aboutHTML = (num) => { // simple about page
     return `<div class="about" id="about${num}">
                 <div class="topbar" id="about${num}-topbar">
                 <div class="left">
@@ -357,7 +352,7 @@ export const aboutHTML = (num) => {
             </div>`;
 }
 
-export const minesweeperHTML = (num) => {
+export const minesweeperHTML = (num) => { // minesweeper game
     return `<div class="minesweeper" id="minesweeper${num}">
                 <div class="topbar" id="minesweeper${num}-topbar">
                     <div class="left">

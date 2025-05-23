@@ -37,10 +37,10 @@ export const draggableElement = (name) => {
     let initialY = e.clientY;
 
     if (name.indexOf("icon") > 0 && windowDetails.get(name) == null) {
-      windowDetails.set(name, {moveable: true, winHeight: document.getElementById(name).offsetHeight + "px", winWidth: document.getElementById(name).offsetWidth + "px"}); // add icon to details map
+      windowDetails.set(name, {moveable: true, winHeight: document.getElementById(name).offsetHeight + "px", winWidth: document.getElementById(name).offsetWidth + "px"}); // add icon to details map (for moving the desktop icons)
     }
  
-    const moveElement = (e) => {
+    const moveElement = (e) => { // allow windows and icons to move
       if (windowDetails.get(name).moveable) {
         let currentX = e.clientX;
         let currentY = e.clientY;
@@ -51,11 +51,11 @@ export const draggableElement = (name) => {
       }
     };
 
-    const stopElement = () => {
+    const stopElement = () => { // stops the element from moving after mouse up
       document.removeEventListener("mousemove", moveElement);
       document.removeEventListener("mouseup", stopElement);
 
-      if (name != "recycle-icon" && name.indexOf("icon") > 0) {
+      if (name != "recycle-icon" && name.indexOf("icon") > 0) { // if an icon was being moved and that icon was not the recycling bin
         const rect = document.querySelector(`#${name} img`).getBoundingClientRect();
         const recycle = document.querySelector("#recycle-icon img").getBoundingClientRect();
 
@@ -64,8 +64,8 @@ export const draggableElement = (name) => {
                       rect.bottom < recycle.top + 10 || 
                       10 + rect.top > recycle.bottom)
     
-        if (overlap) {
-          document.getElementById(name).remove(); // when moving an icon- if you overlap with the recycle bin- remove the icon from the desktop
+        if (overlap) { // if the icon overlaps with the recycle
+          document.getElementById(name).remove(); // remove that icon
         }
       }
     };
@@ -79,16 +79,14 @@ export const draggableElement = (name) => {
 const addToTaskBar = (name, type) => {
   let url = `<img src="./assets/icons/${type}.png" alt="Image Broken" />`;
 
-  if (type.indexOf(".") > 0) {
-    let fileName = type
+  if (type.indexOf(".") > 0) { // if an image window is being added to the task bar
+    let fileName = type 
 
     if (type.indexOf("gif") > 0) {
-      fileName = type.substring(0, type.indexOf("gif")) + "jpg"
-
-      console.log(fileName);
+      fileName = type.substring(0, type.indexOf("gif")) + "jpg" // handle thumbnails for gifs
     }
 
-    url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`;
+    url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`; // url for taskbar thumbnail
   }
 
   let newTab = `<div class="tabs" id="${name}tab">
@@ -99,7 +97,7 @@ const addToTaskBar = (name, type) => {
   document.getElementById("window-tabs").insertAdjacentHTML("beforeend", newTab);
 
   document.getElementById(`${name}tab`).addEventListener("click", () => {
-    bringToTop(name);
+    bringToTop(name); // clicking on a tab brings its window to the top of the z axis
 
     if (document.getElementById(name).style.display === "none") {
       document.getElementById(name).style.display = "block"; // if the window is in the tray get it out of the tray
@@ -193,74 +191,72 @@ export const homeWindow = (num) => {
   document.getElementById("windows").insertAdjacentHTML("beforeend", homeHTML(num));
 
   if (popUp == true) {
-    document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`;
+    document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`; // check check box
   } else {
-    document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox home-popup"></i>`;
+    document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox home-popup"></i>`; // leave check box empty
   }
 
-  document.querySelector(`#home${num} .icon`).addEventListener("click", () => {
-    if (popUp == true) {
+  document.querySelector(`#home${num} .icon`).addEventListener("click", () => { 
+    if (popUp == true) { // checking a checked check box will change the cookie so the popup will not show up on launch
       popUp = false;
       document.cookie = `popup=${popUp}`; 
 
       document.querySelectorAll(".home").forEach(element => {
         document.querySelector(`#${element.id} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox home-popup"></i>`;
       });
-    } else if (popUp == false) {
+    } else if (popUp == false) { // checking an empty check box will change the cookie so the popup will show up on launch
       popUp = true;
       document.cookie = `popup=${popUp}`; 
 
       document.querySelectorAll(".home").forEach(element => {
-        document.querySelector(`#${element.id} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`;
+        document.querySelector(`#${element.id} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`; // makes the checkbox state on all open home windows match eachother
       });
     }
   });
   
-  windowSetUp(`home${num}`, "home");
+  windowSetUp(`home${num}`, "home"); // add functions for window
 };
 
-export const imageWindow = (image, num) => {
+export const imageWindow = (image, num) => { // window showing just an image
   let name = image.file.substring(0, image.file.indexOf("."));
 
   document.getElementById("windows").insertAdjacentHTML("beforeend", imageHTML(name, image, num));
   windowSetUp(`${name}`, `${image.file}`);
 };
 
-export const gamePitchWindow = (num) => {
+export const gamePitchWindow = (num) => { // window showing game pitch PDF
   document.getElementById("windows").insertAdjacentHTML("beforeend", gamePitchHTML(num));
 
-  for (let i = 1; i < 18; i++) {
+  for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
     let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
     document.querySelector(`#game${num} .game-container`).insertAdjacentHTML("beforeend", img);
-    
   }
 
   windowSetUp(`game${num}`, "game");
-  maximize(`game${num}`);
+  maximize(`game${num}`); // automatically maximize window
 }
 
-const gallerySetUp = (num, folder) => {``
-  let prevImg = "";
-  let amt = 0;
+const gallerySetUp = (num, folder) => { // setting up the images in the galleries
+  let prevImg = ""; // keeps track of previous image so the blue highlight can be removed
+  let amt = 0; // amount of images being shown in folder 
 
-  gallery.filter((gallery) => gallery.file.charAt(0).toUpperCase() == folder.charAt(0).toUpperCase()).forEach((element) => {
-    let name = element.file.substring(0, element.file.indexOf("."));
+  gallery.filter((gallery) => gallery.file.charAt(0).toUpperCase() == folder.charAt(0).toUpperCase()).forEach((element) => { // only gets images of the specified filter type (which is the first letter of the image file)
+    let name = element.file.substring(0, element.file.indexOf(".")); // the name of the file not including the extension
 
-    let fileName = `thumbnails/TB${element.file}`
+    let fileName = `thumbnails/TB${element.file}` // the file name of the thumbnail image which is a lower quality 
 
-    if (name == "Game_Pitch") {
-      fileName = "originals/Game_Pitch.png";
-    } else if (element.file.indexOf("gif") > 0) {
-      fileName = `thumbnails/TB${name}.jpg`;
-      console.log(fileName);
+    if (name == "Game_Pitch") { // if the name of the element contains game pitch
+      fileName = "thumbnails/TBGame_Pitch.png"; // its thumbnail is a png
+    } else if (element.file.indexOf("gif") > 0) { // if the element corresponds to a gif file 
+      fileName = `thumbnails/TB${name}.jpg`; // its thumbnail is a jpg
     }
 
     let imgHTML = ` <div class="gall-icon" id="${name}-icon">
                       <div class="img-icon"><img rel=preload src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
                       <p>${element.file}</p>
-                    </div>`;
+                    </div>`; // HTML for the image icon within the folder
 
-    document.querySelector(`#gallery${num} .images`).insertAdjacentHTML("beforeend", imgHTML);
+    document.querySelector(`#gallery${num} .images`).insertAdjacentHTML("beforeend", imgHTML); // add icon to folder
  
     document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("click", () => {
       document.querySelector(`#gallery${num} #${name}-icon p`).style.color = "#fff"; // change text to white
@@ -274,33 +270,33 @@ const gallerySetUp = (num, folder) => {``
         document.querySelector(`#gallery${num} #${prevName}-icon p`).style.background = ""; // set the previous images text background to nothing
       }
 
-      prevImg = element;
+      prevImg = element; // change the previous image to the current image
     });
 
-    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", (e) => {
-      if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) {
-        gamePitchWindow(getWindowTotal("game"));
+    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
+      if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF
+        gamePitchWindow(getWindowTotal("game")); // open the game pitch window
       } else {
-        imageWindow(element, getWindowTotal(name))
+        imageWindow(element, getWindowTotal(name)) // otherwise open image window
       }
     });
 
-    document.querySelector(`#gallery${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`;
+    document.querySelector(`#gallery${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`; // lists the number of images in the folder
   });
 }
 
-export const galleryWindow = (num, folder) => {
+export const galleryWindow = (num, folder) => { // creates gallery window - folder determines the image filter
   document.getElementById("windows").insertAdjacentHTML("beforeend", galleryHTML(num, folder));
   gallerySetUp(num, folder);
   windowSetUp(`gallery${num}`, "gallery");
 }
 
-export const aboutWindow = (num) => {
+export const aboutWindow = (num) => { // creates about window
   document.getElementById("windows").insertAdjacentHTML("beforeend", aboutHTML(num));
   windowSetUp(`about${num}`, "about");
 }
 
-export const minesweeperWindow = (num) => {
+export const minesweeperWindow = (num) => { // creates minesweeper window
   document.getElementById("windows").insertAdjacentHTML("beforeend", minesweeperHTML(num));
   startMs(num);
   windowSetUp(`minesweeper${num}`, "minesweeper");

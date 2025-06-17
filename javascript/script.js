@@ -2,7 +2,7 @@ import { homeWindow } from "./windows.js";
 import { aboutWindow } from "./windows.js";
 import { galleryWindow } from "./windows.js"; 
 import { minesweeperWindow } from "./windows.js"
-import { convertGallery } from "./data.js"
+import { Window } from "./windows.js";
 
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
@@ -72,35 +72,35 @@ const draggableIcon = (icon) => {
 };
 
 document.getElementById("home-icon").addEventListener("dblclick", () => {
-  homeWindow(getWindowTotal("home"));
+  let home = new Window("home", getWindowTotal("home"));
 });
 
 // gallery icons start
 
 document.getElementById("gallery-icon-traditional").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("traditional"), "traditional", gallery);
+  let traditional = new Window("traditional", getWindowTotal("traditional"));
 });
 
 document.getElementById("gallery-icon-digital").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("digital"), "digital", gallery);
+  let ms = new Window("digital", getWindowTotal("digital"));
 });
 
 document.getElementById("gallery-icon-figure").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("figure"), "figure", gallery);
+  let ms = new Window("figure", getWindowTotal("figure"));
 });
 
 document.getElementById("gallery-icon-game").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("game"), "game", gallery);
+  let ms = new Window("game", getWindowTotal("game"));
 });
 
 // gallery icons end
 
 document.getElementById("about-icon").addEventListener("dblclick", () => {
-  aboutWindow(getWindowTotal("about"));
+  let about = new Window("about", getWindowTotal("about"));
 });
 
 document.getElementById("minesweeper-icon").addEventListener("dblclick", () => {
-  minesweeperWindow(getWindowTotal("minesweeper"));
+  let ms = new Window("minesweeper", getWindowTotal("minesweeper"));
 });
 
 const setUpIcons = () => {
@@ -137,8 +137,6 @@ const startUp = () => {
   }
 
   setUpIcons();
-
-  gallery = convertGallery()
 };
 
 startUp();

@@ -2,8 +2,11 @@ import { getHtml } from "./data.js";
 import { startMs } from "./minesweeper.js"
   import { stopTime } from "./minesweeper.js"
 import { getWindowTotal } from "./script.js"; 
+import { convertGallery } from "./data.js"
 
-class Window {
+let gallery = convertGallery();
+
+export class Window {
   constructor(type, num) {
     this.name = `${type}${num}`
     this.type = type;
@@ -15,8 +18,15 @@ class Window {
     document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(type, num));
 
     this.container = document.getElementById(`${type}${num}`);
-
     this.windowSetUp(); // add functions for window
+
+    if (this.type == "minesweeper") {
+      startMs(this.num);
+    } else if (this.type == "traditional" || this.type == "digital" || this.type ==  "figure" || this.type == "game") {
+      gallerySetUp(this.type, this.num);
+    } else if (this.type == "home") {
+      setUpHomeWindow(this.num);
+    }
   }
 
   draggableElement = () => {
@@ -223,7 +233,7 @@ export const gamePitchWindow = (num) => { // window showing game pitch PDF
   pitchObject.maximize(); // automatically maximize window
 }
 
-const gallerySetUp = (num, folder, gallery) => { // setting up the images in the galleries
+const gallerySetUp = (folder, num) => { // setting up the images in the galleries
   let prevImg = ""; // keeps track of previous image so the blue highlight can be removed
   let amt = 0; // amount of images being shown in folder 
 
@@ -261,7 +271,7 @@ const gallerySetUp = (num, folder, gallery) => { // setting up the images in the
   });
 }
 
-export const galleryWindow = (num, folder, gallery) => { // creates gallery window - folder determines the image filter
+export const galleryWindow = (num, folder) => { // creates gallery window - folder determines the image filter
   let galleryObject = new Window(folder, num);
   gallerySetUp(num, folder, gallery);
 }
@@ -272,5 +282,5 @@ export const aboutWindow = (num) => { // creates about window
 
 export const minesweeperWindow = (num) => { // creates minesweeper window
   let msObject = new Window("minesweeper", num);
-  startMs(num);
+  
 }

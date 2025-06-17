@@ -1,4 +1,4 @@
-class Piece {
+class Piece { // piece object
   constructor(description, file) {
     let isolatedName = file.substring(1, file.indexOf("."));
     let firstLetter = file.substring(0, 1);
@@ -6,22 +6,22 @@ class Piece {
     this.description = description;
     this.file = file;
     this.name = isolatedName;
-    this.thumbnail = `thumbnails/TB${firstLetter}${isolatedName}.jpg`;
+    this.thumbnail = (file.indexOf("Game_Pitch") > -1) ? `thumbnails/TB${firstLetter}${isolatedName}.png` : `thumbnails/TB${firstLetter}${isolatedName}.jpg`;
     this.filter = firstLetter;
   }
 }
 
-export const convertGallery = () => {
+export const convertGallery = () => { // uses given data to extrapolate thumbnail name and filter
   let gallery = [];
 
   galleryData.forEach(element => {
-    gallery.push(new Piece(element.description, element.file));
+    gallery.push(new Piece(element.description, element.file)); 
   });
 
   return gallery;
 }
 
-let galleryData = [
+let galleryData = [ // information for the pieces in the gallery
     {
       description: "Consider putting meanings dates tools or classes here", 
       file: "GGame_Pitch.pdf"
@@ -160,7 +160,7 @@ let galleryData = [
     },
 ];
 
-export const getHtml = (name, num) => {
+export const getHtml = (name, num) => { // return the HTML for a given window
   switch (name) {
     case "home":
       return homeHTML(num);
@@ -183,7 +183,7 @@ export const getHtml = (name, num) => {
   }
 }
 
-export const homeHTML = (num) => { // creates HTML for home page- each new instance will have a new id
+const homeHTML = (num) => { // creates HTML for home page- each new instance will have a new id
     return `<div class="home" id="home${num}">
                 <div class="topbar" id="home${num}-topbar">
                 <div class="left">
@@ -205,7 +205,7 @@ export const homeHTML = (num) => { // creates HTML for home page- each new insta
             </div>`;
 }
 
-export const imageHTML = (file, num) => { // full window images that the user opens through gallery folders
+const imageHTML = (file, num) => { // full window images that the user opens through gallery folders
   return `<div class="image-window" id="${file}${num}">
               <div class="topbar" id="${file}${num}-topbar">
               <div class="left">
@@ -222,7 +222,7 @@ export const imageHTML = (file, num) => { // full window images that the user op
           </div>`;
 }
 
-export const galleryHTML = (folder, num) => { // showcases a series of images which the player can click on
+const galleryHTML = (folder, num) => { // showcases a series of images which the player can click on
     return `<div class="gallery" id="${folder}${num}">
                 <div class="topbar" id="gallery${num}-topbar">
                 <div class="left">
@@ -279,7 +279,7 @@ export const galleryHTML = (folder, num) => { // showcases a series of images wh
             </div>`
 }
 
-export const gamePitchHTML = (num) => { // opens a series of images one after another to create the illusion of a PDF
+const gamePitchHTML = (num) => { // opens a series of images one after another to create the illusion of a PDF
   return `<div class="game-pitch" id="game-pitch${num}">
               <div class="topbar" id="game-pitch${num}-topbar">
               <div class="left">
@@ -330,7 +330,7 @@ export const gamePitchHTML = (num) => { // opens a series of images one after an
           </div>`;
 }
 
-export const aboutHTML = (num) => { // simple about page
+const aboutHTML = (num) => { // simple about page
     return `<div class="about" id="about${num}">
                 <div class="topbar" id="about${num}-topbar">
                 <div class="left">
@@ -389,7 +389,7 @@ export const aboutHTML = (num) => { // simple about page
             </div>`;
 }
 
-export const minesweeperHTML = (num) => { // minesweeper game
+const minesweeperHTML = (num) => { // minesweeper game
     return `<div class="minesweeper" id="minesweeper${num}">
                 <div class="topbar" id="minesweeper${num}-topbar">
                     <div class="left">

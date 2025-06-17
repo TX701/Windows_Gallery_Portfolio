@@ -3,19 +3,19 @@ import { Window } from "./windows.js";
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
 
-class Icon {
+class Icon { // icon object for opening windows
   constructor(container) {
     this.container = container;
     this.name = container.id.substring(0, container.id.indexOf("-"));
 
-    if (this.name != "recycle") {
+    if (this.name != "recycle") { // the recylce bin doesnt have a window
       this.setIcon();
     }
   }
 
   setIcon() {
     this.container.addEventListener("dblclick", () => {
-      new Window(this.name, getWindowTotal(this.name));
+      new Window(this.name, getWindowTotal(this.name)); // double clicking on an icon will "open" that icons window
     });
   }
 
@@ -73,7 +73,7 @@ const getCookie = () => { // gets the users page cookies
 }
 
 // when opening a new window we need to know how many of that "type" (home/gall/etc) are already open for id naming purposes
-export const getWindowTotal = (name) => {
+export const getWindowTotal = (name) => { // not a part of the icon class as it is used by non icon objects
   let filteredArray = order.filter((e) => e.indexOf(name) != -1);
 
   if (filteredArray.length == 0) {

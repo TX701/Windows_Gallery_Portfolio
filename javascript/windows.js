@@ -4,13 +4,14 @@ import { startMs } from "./minesweeper.js"
 import { convertGallery } from "./data.js"
 import { getWindowTotal } from "./script.js"
 
-let gallery = convertGallery();
+let gallery = convertGallery(); // retrieves an array of piece objects from data.js
 
-export class Window {
+export class Window { // window object
   constructor(type, num) {
-    this.name = `${type}${num}`
+    this.name = `${type}${num}` // id name
     this.type = type;
     this.num = num;
+
     this.moveable = null;
     this.winHeight = null;
     this.winWidth = null;
@@ -20,6 +21,7 @@ export class Window {
     this.container = document.getElementById(`${type}${num}`);
     this.windowSetUp(); // add functions for window
 
+    // extra javascript for different windows
     if (this.type == "minesweeper") {
       startMs(this.num);
     } else if (this.type == "traditional" || this.type == "digital" || this.type ==  "figure" || this.type == "game") {
@@ -27,7 +29,6 @@ export class Window {
     } else if (this.type == "home") {
       setUpHomeWindow(this.num);
     } else if (this.type == "game-pitch") {
-
       for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
         let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
         document.querySelector(`#${this.name} .game-pitch-container`).insertAdjacentHTML("beforeend", img);
@@ -37,7 +38,7 @@ export class Window {
     }
   }
 
-  draggableElement = () => {
+  draggableElement = () => { // allow window to be moved around
     this.container.addEventListener("mousedown", (e) => {
       let initialX = e.clientX;
       let initialY = e.clientY;
@@ -165,6 +166,11 @@ export class Window {
   // add element to the task bar at the bottom of the page
   addToTaskBar = () => {
     let url = `<img src="./assets/icons/${this.type}.png" alt="Image Broken" />`;
+    let text = `${this.type.charAt(0).toUpperCase()}${this.type.substring(1)}`;
+
+    if (this.type == "game-pitch") {
+      text = "Game_Pitch";
+    }
 
     if (this.type.indexOf(".") > 0) { // if an image window is being added to the task bar
       let fileName = this.type 
@@ -180,7 +186,7 @@ export class Window {
 
     let newTab = `<div class="tabs" id="${this.name}tab">
                     ${url}
-                    <p>${this.type.charAt(0).toUpperCase()}${this.type.substring(1)}</p>
+                    <p>${text}</p>
                   </div>`;
 
     document.getElementById("window-tabs").insertAdjacentHTML("beforeend", newTab);
@@ -248,26 +254,13 @@ const gallerySetUp = (folder, num) => { // setting up the images in the gallerie
     });
 
     document.querySelector(`#${folder}${num} #${element.name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
-      if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF
+      if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF (technically an icon but its not made as one as it presents differently)
         let pitchObject = new Window("game-pitch", getWindowTotal("game-pitch"));
       } else {
-        let imageObject = new Window(element.file, getWindowTotal(element.file)); // open the game pitch window
+        let imageObject = new Window(element.file, getWindowTotal(element.file)); // open the game pitch window (technically an icon but its not made as one as it presents differently)
       }
     });
 
     document.querySelector(`#${folder}${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`; // lists the number of images in the folder
   });
-}
-
-export const galleryWindow = (num, folder) => { // creates gallery window - folder determines the image filter
-  let galleryObject = new Window(folder, num);
-  gallerySetUp(num, folder, gallery);
-}
-
-export const aboutWindow = (num) => { // creates about window
-  let aboutObject = new Window("about", num);
-}
-
-export const minesweeperWindow = (num) => { // creates minesweeper window
-  let msObject = new Window("minesweeper", num);
 }

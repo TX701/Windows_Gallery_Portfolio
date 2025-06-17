@@ -26,6 +26,14 @@ export class Window {
       gallerySetUp(this.type, this.num);
     } else if (this.type == "home") {
       setUpHomeWindow(this.num);
+    } else if (this.type == "game-pitch") {
+
+      for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
+        let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
+        document.querySelector(`#${this.name} .game-pitch-container`).insertAdjacentHTML("beforeend", img);
+      }
+    
+      this.maximize(); // automatically maximize window
     }
   }
 
@@ -213,26 +221,6 @@ const setUpHomeWindow = (num) => {
   });
 }
 
-export const homeWindow = (num) => {
-  let homeObject = new Window("home", num);
-  setUpHomeWindow(num);
-};
-
-export const imageWindow = (image, num) => { // window showing just an image
-  let imageObject = new Window(image.file, num);
-};
-
-export const gamePitchWindow = (num) => { // window showing game pitch PDF
-  let pitchObject = new Window("game-pitch", num);
-
-  for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
-    let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
-    document.querySelector(`#game-pitch${num} .game-pitch-container`).insertAdjacentHTML("beforeend", img);
-  }
-
-  pitchObject.maximize(); // automatically maximize window
-}
-
 const gallerySetUp = (folder, num) => { // setting up the images in the galleries
   let prevImg = ""; // keeps track of previous image so the blue highlight can be removed
   let amt = 0; // amount of images being shown in folder 
@@ -261,9 +249,9 @@ const gallerySetUp = (folder, num) => { // setting up the images in the gallerie
 
     document.querySelector(`#${folder}${num} #${element.name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
       if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF
-        gamePitchWindow(getWindowTotal("game-pitch")); // open the game pitch window
+        let imageObject = new Window(image.file, num); // open the game pitch window
       } else {
-        imageWindow(element, getWindowTotal(element.name)) // otherwise open image window
+        let pitchObject = new Window("game-pitch", num);
       }
     });
 
@@ -282,5 +270,4 @@ export const aboutWindow = (num) => { // creates about window
 
 export const minesweeperWindow = (num) => { // creates minesweeper window
   let msObject = new Window("minesweeper", num);
-  
 }

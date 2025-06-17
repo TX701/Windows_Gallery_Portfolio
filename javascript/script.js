@@ -1,4 +1,3 @@
-import { homeWindow } from "./windows.js";
 import { aboutWindow } from "./windows.js";
 import { galleryWindow } from "./windows.js"; 
 import { minesweeperWindow } from "./windows.js"
@@ -7,6 +6,61 @@ import { Window } from "./windows.js";
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
 let gallery = []
+
+class Icon {
+  constructor(container) {
+    this.container = container;
+    this.name = container.id.substring(0, container.id.indexOf("-"));
+
+    if (this.name != "recycle") {
+      this.setIcon();
+    }
+  }
+
+  setIcon() {
+    this.container.addEventListener("dblclick", () => {
+      new Window(this.name, getWindowTotal(this.name));
+    });
+  }
+
+  draggableIcon = () => {
+    this.container.addEventListener("mousedown", (e) => {
+      let initialX = e.clientX;
+      let initialY = e.clientY;
+   
+      const moveElement = (e) => { // allow windows and icons to move
+        let currentX = e.clientX;
+        let currentY = e.clientY;
+        this.container.style.left = this.container.offsetLeft + (currentX - initialX) + "px";
+        this.container.style.top = this.container.offsetTop + (currentY - initialY) + "px";
+        initialX = currentX;
+        initialY = currentY;
+      };
+  
+      const stopElement = () => { // stops the element from moving after mouse up
+        document.removeEventListener("mousemove", moveElement);
+        document.removeEventListener("mouseup", stopElement);
+  
+        if (this.name != "recycle") { // if an icon was being moved and that icon was not the recycling bin
+          const rect = document.querySelector(`#${this.container.id} img`).getBoundingClientRect();
+          const recycle = document.querySelector("#recycle-icon img").getBoundingClientRect();
+  
+          let overlap = !(rect.right < recycle.left + 10 || 
+                        10 + rect.left > recycle.right || 
+                        rect.bottom < recycle.top + 10 || 
+                        10 + rect.top > recycle.bottom)
+      
+          if (overlap) { // if the icon overlaps with the recycle
+            this.container.remove(); // remove that icon
+          }
+        }
+      };
+  
+      document.addEventListener("mousemove", moveElement);
+      document.addEventListener("mouseup", stopElement);
+    });
+  };
+}
 
 const getCookie = () => { // gets the users page cookies
   let current = decodeURIComponent(document.cookie).split(';');
@@ -33,94 +87,26 @@ export const getWindowTotal = (name) => {
   }
 };
 
-const draggableIcon = (icon) => {
-  document.getElementById(icon).addEventListener("mousedown", (e) => {
-    let initialX = e.clientX;
-    let initialY = e.clientY;
- 
-    const moveElement = (e) => { // allow windows and icons to move
-      let currentX = e.clientX;
-      let currentY = e.clientY;
-      document.getElementById(icon).style.left = document.getElementById(icon).offsetLeft + (currentX - initialX) + "px";
-      document.getElementById(icon).style.top = document.getElementById(icon).offsetTop + (currentY - initialY) + "px";
-      initialX = currentX;
-      initialY = currentY;
-    };
-
-    const stopElement = () => { // stops the element from moving after mouse up
-      document.removeEventListener("mousemove", moveElement);
-      document.removeEventListener("mouseup", stopElement);
-
-      if (icon != "recycle-icon") { // if an icon was being moved and that icon was not the recycling bin
-        const rect = document.querySelector(`#${icon} img`).getBoundingClientRect();
-        const recycle = document.querySelector("#recycle-icon img").getBoundingClientRect();
-
-        let overlap = !(rect.right < recycle.left + 10 || 
-                      10 + rect.left > recycle.right || 
-                      rect.bottom < recycle.top + 10 || 
-                      10 + rect.top > recycle.bottom)
-    
-        if (overlap) { // if the icon overlaps with the recycle
-          document.getElementById(icon).remove(); // remove that icon
-        }
-      }
-    };
-
-    document.addEventListener("mousemove", moveElement);
-    document.addEventListener("mouseup", stopElement);
-  });
-};
-
-document.getElementById("home-icon").addEventListener("dblclick", () => {
-  let home = new Window("home", getWindowTotal("home"));
-});
-
-// gallery icons start
-
-document.getElementById("gallery-icon-traditional").addEventListener("dblclick", () => {
-  let traditional = new Window("traditional", getWindowTotal("traditional"));
-});
-
-document.getElementById("gallery-icon-digital").addEventListener("dblclick", () => {
-  let ms = new Window("digital", getWindowTotal("digital"));
-});
-
-document.getElementById("gallery-icon-figure").addEventListener("dblclick", () => {
-  let ms = new Window("figure", getWindowTotal("figure"));
-});
-
-document.getElementById("gallery-icon-game").addEventListener("dblclick", () => {
-  let ms = new Window("game", getWindowTotal("game"));
-});
-
-// gallery icons end
-
-document.getElementById("about-icon").addEventListener("dblclick", () => {
-  let about = new Window("about", getWindowTotal("about"));
-});
-
-document.getElementById("minesweeper-icon").addEventListener("dblclick", () => {
-  let ms = new Window("minesweeper", getWindowTotal("minesweeper"));
-});
-
 const setUpIcons = () => {
   let locations = [];
-
+  
   // placing the icons in nice rows for the start but changing their display to absolute to allow them to be moved
 
   document.querySelectorAll(".icons").forEach(element => {
+    let icon = new Icon(element); // create icon object
+
     let bodyRect = document.body.getBoundingClientRect();
     let elemRect = element.getBoundingClientRect();
 
-    locations.push({e: element, left: elemRect.left - bodyRect.left, top: elemRect.top - bodyRect.top});
+    locations.push({i: icon, left: elemRect.left - bodyRect.left, top: elemRect.top - bodyRect.top});
   });
 
   locations.forEach(element => {
-    element.e.style.position = "absolute"; // changing display to absolute
-    element.e.style.left = `${element.left}px`; // setting the icons position back to its original position when its position was flex
-    element.e.style.top = `${element.top}px`; // setting the icons position back to its original position when its position was flex
+    element.i.container.style.position = "absolute"; // changing display to absolute
+    element.i.container.style.left = `${element.left}px`; // setting the icons position back to its original position when its position was flex
+    element.i.container.style.top = `${element.top}px`; // setting the icons position back to its original position when its position was flex
 
-    draggableIcon(element.e.id);
+    element.i.draggableIcon();
   });
 }
 
@@ -133,7 +119,7 @@ const startUp = () => {
   }
 
   if (popUp === true) {
-    homeWindow(""); // if popup is true open the home window
+    new Window("home", getWindowTotal("home"));
   }
 
   setUpIcons();

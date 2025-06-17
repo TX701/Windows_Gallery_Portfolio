@@ -160,7 +160,7 @@ let galleryData = [
     },
 ];
 
-export const getHtml = (name, image, num) => {
+export const getHtml = (name, num) => {
   switch (name) {
     case "home":
       return homeHTML(num);
@@ -179,7 +179,7 @@ export const getHtml = (name, image, num) => {
     case "figure":
       return galleryHTML(name, num); 
     default:
-      return imageHTML(name, image, num);
+      return imageHTML(name, num);
   }
 }
 
@@ -205,21 +205,21 @@ export const homeHTML = (num) => { // creates HTML for home page- each new insta
             </div>`;
 }
 
-export const imageHTML = (name, image, num) => { // full window images that the user opens through gallery folders
-    return `<div class="image-window" id="${name}${num}">
-                <div class="topbar" id="${name}${num}-topbar">
-                <div class="left">
-                    <h1>${image.file}</h1>
-                </div>
-                <div class="right">
-                    <img class="tray" draggable="false" id="${name}${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
-                    <img class="min" draggable="false" id="${name}${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
+export const imageHTML = (file, num) => { // full window images that the user opens through gallery folders
+  return `<div class="image-window" id="${file}${num}">
+              <div class="topbar" id="${file}${num}-topbar">
+              <div class="left">
+                  <h1>${file}</h1>
+              </div>
+              <div class="right">
+                  <img class="tray" draggable="false" id="${file}${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
+                  <img class="min" draggable="false" id="${file}${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
 
-                    <img id="${name}${num}-exit" draggable="false"  src="./assets/icons/close-icon.png" alt="" />
-                </div>
-                </div>
-                <img src="./assets/gallery/originals/${image.file}" alt="Broken Image" draggable="false">
-            </div>`;
+                  <img id="${file}${num}-exit" draggable="false"  src="./assets/icons/close-icon.png" alt="" />
+              </div>
+              </div>
+              <img src="./assets/gallery/originals/${file}" alt="Broken Image" draggable="false">
+          </div>`;
 }
 
 export const galleryHTML = (folder, num) => { // showcases a series of images which the player can click on

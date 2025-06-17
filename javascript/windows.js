@@ -12,7 +12,7 @@ class Window {
     this.winHeight = null;
     this.winWidth = null;
 
-    document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(type, null, num));
+    document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(type, num));
 
     this.container = document.getElementById(`${type}${num}`);
 
@@ -57,8 +57,6 @@ class Window {
     document.querySelector(`#${this.name}-topbar`).style.width = "100%";
 
     this.moveable = false;
-
-    // windowDetails.set(name, {moveable: false, winHeight: windowDetails.get(name).winHeight, winWidth: windowDetails.get(name).winWidth}); // the window cannot move in fullscreen mode
 
     document.getElementById(`${this.name}-max`).style.display = "none";
     document.getElementById(`${this.name}-min`).style.display = "block";
@@ -211,22 +209,18 @@ export const homeWindow = (num) => {
 };
 
 export const imageWindow = (image, num) => { // window showing just an image
-  let name = image.file.substring(0, image.file.indexOf("."));
-
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(name, image, num));
-  windowSetUp(`${name}`, `${image.file}`);
+  let imageObject = new Window(image.file, num);
 };
 
 export const gamePitchWindow = (num) => { // window showing game pitch PDF
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("game-pitch", null, num));
+  let pitchObject = new Window("game-pitch", num);
 
   for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
     let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
     document.querySelector(`#game-pitch${num} .game-pitch-container`).insertAdjacentHTML("beforeend", img);
   }
 
-  windowSetUp(`game-pitch${num}`, "game-pitch");
-  maximize(`game-pitch${num}`); // automatically maximize window
+  pitchObject.maximize(); // automatically maximize window
 }
 
 const gallerySetUp = (num, folder, gallery) => { // setting up the images in the galleries

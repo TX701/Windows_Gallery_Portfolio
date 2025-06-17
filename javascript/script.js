@@ -3,9 +3,11 @@ import { aboutWindow } from "./windows.js";
 import { galleryWindow } from "./windows.js"; 
 import { minesweeperWindow } from "./windows.js"
 import { draggableElement } from "./windows.js"
+import { convertGallery } from "./data.js"
 
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
+let gallery = []
 
 const getCookie = () => { // gets the users page cookies
   let current = decodeURIComponent(document.cookie).split(';');
@@ -39,19 +41,19 @@ document.getElementById("home-icon").addEventListener("dblclick", () => {
 // gallery icons start
 
 document.getElementById("gallery-icon-traditional").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("gallery"), "traditional");
+  galleryWindow(getWindowTotal("traditional"), "traditional", gallery);
 });
 
 document.getElementById("gallery-icon-digital").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("gallery"), "digital");
+  galleryWindow(getWindowTotal("digital"), "digital", gallery);
 });
 
 document.getElementById("gallery-icon-figure").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("gallery"), "figure");
+  galleryWindow(getWindowTotal("figure"), "figure", gallery);
 });
 
 document.getElementById("gallery-icon-game").addEventListener("dblclick", () => {
-  galleryWindow(getWindowTotal("gallery"), "game");
+  galleryWindow(getWindowTotal("game"), "game", gallery);
 });
 
 // gallery icons end
@@ -98,6 +100,8 @@ const startUp = () => {
   }
 
   setUpIcons();
+
+  gallery = convertGallery()
 };
 
 startUp();

@@ -519,7 +519,7 @@
 
 /* game pitch window */
 
-.game {
+.game-pitch {
   height: 80vh;
   width: 90vw;
 
@@ -538,7 +538,7 @@
   position: absolute;
 }
 
-.game .game-container {
+.game-pitch .game-pitch-container {
   height: 100%;
   width: 100%;
 
@@ -547,12 +547,12 @@
   scrollbar-width: none;  /* firefox */
 }
 
-.game .game-container img {
+.game-pitch .game-pitch-container img {
   width: 100%;
   object-fit: contain;
 }
 
-.game .game-footer {
+.game-pitch .game-pitch-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -564,11 +564,11 @@
   width: 100%;
 }
 
-.game .game-footer h2 {
+.game-pitch .game-pitch-footer h2 {
   font-size: 0.75rem;
 }
 
-.game .game-footer button {
+.game-pitch .game-pitch-footer button {
   background: var(--window-bg);
   border-top-color: var(--window-top-left);
   border-left-color: var(--window-top-left);

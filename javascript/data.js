@@ -1,150 +1,195 @@
-/*
-images are shown in the assets folder
-the originals folder contains the high quality images that the user will see when clicking on a file to view
-the thumbnails folder contains low quality images that will be seen in the viewer
-the thumbnails should have the same name with TB in the front of the name
-for gifs the thumbnail should be a still jpg
-*/
+class Piece {
+  constructor(description, file) {
+    let isolatedName = file.substring(1, file.indexOf("."));
+    let firstLetter = file.substring(0, 1);
 
-// array for gallery items
-export const gallery = [
+    this.description = description;
+    this.file = file;
+    this.name = isolatedName;
+    this.thumbnail = `thumbnails/TB${firstLetter}${isolatedName}.jpg`;
+    this.filter = firstLetter;
+  }
+}
+
+export const convertGallery = () => {
+  let gallery = [];
+
+  galleryData.forEach(element => {
+    gallery.push(new Piece(element.description, element.file));
+  });
+  console.log(gallery);
+  return gallery;
+}
+
+let galleryData = [
     {
       description: "Consider putting meanings dates tools or classes here", 
-      file: "Game_Pitch.pdf", // this is a special case the thumbnail uses a PNG and opening this opens a series of images rather than just one
-    },
-    {
-      description: "Consider putting meanings dates tools or classes here", // any text youd like displayed with the image
-      file: "T1.jpg", // name of the file including its extension 
+      file: "GGame_Pitch.pdf"
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "T2.jpg",
+      file: "Tt1.jpg"
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D3.jpg",
+      file: "Tt2.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D4.jpg",
+      file: "Dt3.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F5.jpg",
+      file: "Dt4.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F6.jpg",
+      file: "Ft5.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D7.jpg",
+      file: "Ft6.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D8.gif", 
+      file: "Dt7.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "T9.jpg",
+      file: "Dt8.gif",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "T10.jpg",
+      file: "Tt9.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F11.jpg",
+      file: "Tt10.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D12.jpg",
+      file: "Ft11.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D13.jpg",
+      file: "Dt12.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F14.jpg",
+      file: "Dt13.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F15.jpg",
+      file: "Ft14.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "T16.jpg",
+      file: "Ft15.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D17.jpg",
+      file: "Tt16.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F18.jpg",
+      file: "Dt17.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D19.jpg",
+      file: "Ft18.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F20.jpg",
+      file: "Dt19.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F21.jpg",
+      file: "Ft20.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "G4.png",
+      file: "Ft21.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "G3.png",
+      file: "Gt4.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "G2.png",
+      file: "Gt3.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "G1.png",
+      file: "Gt2.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F24.jpg",
+      file: "Gt1.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F23.png",
+      file: "Ft24.jpg",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F22.png",
+      file: "Ft23.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F61.png",
+      file: "Ft22.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "F60.png",
+      file: "Ft61.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D35.png",
+      file: "Ft60.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D34.png",
+      file: "Dt35.png",
     },
     {
       description: "Consider putting meanings dates tools or classes here",
-      file: "D123.png",
+      file: "Dt34.png",
+    },
+    {
+      description: "Consider putting meanings dates tools or classes here",
+      file: "Dt123.png",
     },
 ];
+
+export const getHtml = (name, image, num) => {
+  switch (name) {
+    case "home":
+      console.log(`home html`);
+      return homeHTML(num);
+    case "about":
+        console.log(`about html`);
+        return aboutHTML(num);
+    case "minesweeper":
+        console.log(`minesweeper html`);
+        return minesweeperHTML(num);
+    case "game":
+      console.log(`game html`);
+      return galleryHTML(name, num);
+    case "game-pitch":
+      return gamePitchHTML(num);
+    case "digital":
+      console.log(`digital html`);
+      return galleryHTML(name, num);
+    case "traditional":
+      console.log(`traditional html`);
+      return galleryHTML(name, num);
+    case "figure":
+      console.log(`figure html`);
+      return galleryHTML(name, num); 
+    default:
+      console.log(`image html`);
+      return imageHTML(name, image, num);
+  }
+}
 
 export const homeHTML = (num) => { // creates HTML for home page- each new instance will have a new id
     return `<div class="home" id="home${num}">
@@ -185,18 +230,18 @@ export const imageHTML = (name, image, num) => { // full window images that the 
             </div>`;
 }
 
-export const galleryHTML = (num, folder) => { // showcases a series of images which the player can click on
-    return `<div class="gallery" id="gallery${num}">
+export const galleryHTML = (folder, num) => { // showcases a series of images which the player can click on
+    return `<div class="gallery" id="${folder}${num}">
                 <div class="topbar" id="gallery${num}-topbar">
                 <div class="left">
                     <img src="./assets/icons/gallery.png" alt="Broken Image" />
                     <h1>${folder.charAt(0).toUpperCase()}${folder.substring(1)}</h1>
                 </div>
                 <div class="right">
-                    <img class="tray" draggable="false" id="gallery${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
-                    <img class="max" draggable="false" id="gallery${num}-max" src="./assets/icons/max-icon.png" alt="" />
-                    <img class="min" draggable="false" id="gallery${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
-                    <img id="gallery${num}-exit" src="./assets/icons/close-icon.png" alt="" />
+                    <img class="tray" draggable="false" id="${folder}${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
+                    <img class="max" draggable="false" id="${folder}${num}-max" src="./assets/icons/max-icon.png" alt="" />
+                    <img class="min" draggable="false" id="${folder}${num}-min" src="./assets/icons/restoredown-icon.png" alt="" />
+                    <img id="${folder}${num}-exit" src="./assets/icons/close-icon.png" alt="" />
                 </div>
                 </div>
 
@@ -243,17 +288,17 @@ export const galleryHTML = (num, folder) => { // showcases a series of images wh
 }
 
 export const gamePitchHTML = (num) => { // opens a series of images one after another to create the illusion of a PDF
-  return `<div class="game" id="game${num}">
-              <div class="topbar" id="game${num}-topbar">
+  return `<div class="game-pitch" id="game-pitch${num}">
+              <div class="topbar" id="game-pitch${num}-topbar">
               <div class="left">
                   <img src="./assets/icons/gallery.png" alt="Broken Image" />
                   <h1>Game Pitch</h1>
               </div>
               <div class="right">
-                  <img class="tray" id="game${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
-                  <img class="max" id="game${num}-max" src="./assets/icons/max-icon.png" alt="" />
-                  <img class="min" id="game${num}-min" src="./assets/icons/restoredown-icon.png" alt=""/>
-                  <img id="game${num}-exit" src="./assets/icons/close-icon.png" alt=""/>
+                  <img class="tray" id="game-pitch${num}-tray" src="./assets/icons/tray-icon.png" alt="" />
+                  <img class="max" id="game-pitch${num}-max" src="./assets/icons/max-icon.png" alt="" />
+                  <img class="min" id="game-pitch${num}-min" src="./assets/icons/restoredown-icon.png" alt=""/>
+                  <img id="game-pitch${num}-exit" src="./assets/icons/close-icon.png" alt=""/>
               </div>
               </div>
 
@@ -283,10 +328,10 @@ export const gamePitchHTML = (num) => { // opens a series of images one after an
                     </div>
                 </div>
 
-                <div class=game-container>
+                <div class=game-pitch-container>
                     
                 </div>
-              <div class="game-footer">
+              <div class="game-pitch-footer">
               <h2>Game_Pitch.pdf</h2>
               <a href="./assets/game_pitch/PITCH_final.pdf" download><button>Download</button></a>
               </div>

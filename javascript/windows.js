@@ -1,13 +1,6 @@
-import { homeHTML } from "./data.js";
-import { galleryHTML } from "./data.js";
-  import { gallery } from "./data.js"
-  import { imageHTML } from "./data.js";
-  import { gamePitchHTML } from "./data.js";
-import { aboutHTML } from "./data.js";
-import { minesweeperHTML } from "./data.js";
+import { getHtml } from "./data.js";
 import { startMs } from "./minesweeper.js"
   import { stopTime } from "./minesweeper.js"
-
 import { getWindowTotal } from "./script.js"; 
 
 const windowDetails = new Map(); // [windowname, {moveable: boolean, winHeight: valuepx, winWidth: valuepx}]
@@ -87,6 +80,8 @@ const addToTaskBar = (name, type) => {
     }
 
     url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`; // url for taskbar thumbnail
+  } else if (type == "traditional" || type == "digital" || type == "figure" || type == "game") {
+    url = `<img src="./assets/icons/gallery.png" alt="Image Broken" />`;
   }
 
   let newTab = `<div class="tabs" id="${name}tab">
@@ -188,7 +183,7 @@ const windowSetUp = (name, type) => {
 };
 
 export const homeWindow = (num) => {
-  document.getElementById("windows").insertAdjacentHTML("beforeend", homeHTML(num));
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("home", null, num));
 
   if (popUp == true) {
     document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`; // check check box
@@ -220,84 +215,73 @@ export const homeWindow = (num) => {
 export const imageWindow = (image, num) => { // window showing just an image
   let name = image.file.substring(0, image.file.indexOf("."));
 
-  document.getElementById("windows").insertAdjacentHTML("beforeend", imageHTML(name, image, num));
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(name, image, num));
   windowSetUp(`${name}`, `${image.file}`);
 };
 
 export const gamePitchWindow = (num) => { // window showing game pitch PDF
-  document.getElementById("windows").insertAdjacentHTML("beforeend", gamePitchHTML(num));
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("game-pitch", null, num));
 
   for (let i = 1; i < 18; i++) { // PDF has been split into 17 images
     let img = `<img src="./assets/game_pitch/PITCH_final-${i}.png" alt="Broken Image" draggable="false">`;
-    document.querySelector(`#game${num} .game-container`).insertAdjacentHTML("beforeend", img);
+    document.querySelector(`#game-pitch${num} .game-pitch-container`).insertAdjacentHTML("beforeend", img);
   }
 
-  windowSetUp(`game${num}`, "game");
-  maximize(`game${num}`); // automatically maximize window
+  windowSetUp(`game-pitch${num}`, "game-pitch");
+  maximize(`game-pitch${num}`); // automatically maximize window
 }
 
-const gallerySetUp = (num, folder) => { // setting up the images in the galleries
+const gallerySetUp = (num, folder, gallery) => { // setting up the images in the galleries
   let prevImg = ""; // keeps track of previous image so the blue highlight can be removed
   let amt = 0; // amount of images being shown in folder 
 
-  gallery.filter((gallery) => gallery.file.charAt(0).toUpperCase() == folder.charAt(0).toUpperCase()).forEach((element) => { // only gets images of the specified filter type (which is the first letter of the image file)
-    let name = element.file.substring(0, element.file.indexOf(".")); // the name of the file not including the extension
-
-    let fileName = `thumbnails/TB${element.file}` // the file name of the thumbnail image which is a lower quality 
-
-    if (name == "Game_Pitch") { // if the name of the element contains game pitch
-      fileName = "thumbnails/TBGame_Pitch.png"; // its thumbnail is a png
-    } else if (element.file.indexOf("gif") > 0) { // if the element corresponds to a gif file 
-      fileName = `thumbnails/TB${name}.jpg`; // its thumbnail is a jpg
-    }
-
-    let imgHTML = ` <div class="gall-icon" id="${name}-icon">
-                      <div class="img-icon"><img rel=preload src="./assets/gallery/${fileName}" alt=""><div class="img-filter"></div></div>
+  gallery.filter((gallery) => gallery.filter == folder.charAt(0).toUpperCase()).forEach((element) => { // only gets images of the specified filter type (which is the first letter of the image file)
+    let imgHTML = ` <div class="gall-icon" id="${element.name}-icon">
+                      <div class="img-icon"><img rel=preload src="./assets/gallery/${element.thumbnail}" alt=""><div class="img-filter"></div></div>
                       <p>${element.file}</p>
                     </div>`; // HTML for the image icon within the folder
 
-    document.querySelector(`#gallery${num} .images`).insertAdjacentHTML("beforeend", imgHTML); // add icon to folder
+    document.querySelector(`#${folder}${num} .images`).insertAdjacentHTML("beforeend", imgHTML); // add icon to folder
  
-    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("click", () => {
-      document.querySelector(`#gallery${num} #${name}-icon p`).style.color = "#fff"; // change text to white
-      document.querySelector(`#gallery${num} #${name}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
+    document.querySelector(`#${folder}${num} #${element.name}-icon`).addEventListener("click", () => {
+      document.querySelector(`#${folder}${num} #${element.name}-icon p`).style.color = "#fff"; // change text to white
+      document.querySelector(`#${folder}${num} #${element.name}-icon p`).style.background = "rgba(0, 0, 128, 1)"; // make text background blue
       
-      document.querySelector(`#gallery${num} .img-text`).innerHTML = `<p>${element.file}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
+      document.querySelector(`#${folder}${num} .img-text`).innerHTML = `<p>${element.name}</p> <p>${element.description}</p>`; // change the side bar text to match the selected image
 
       if (prevImg != "") {
-        let prevName = prevImg.file.substring(0, prevImg.file.indexOf("."));
-        document.querySelector(`#gallery${num} #${prevName}-icon p`).style.color = "#000"; // make the previously selected images text go back to normal
-        document.querySelector(`#gallery${num} #${prevName}-icon p`).style.background = ""; // set the previous images text background to nothing
+        document.querySelector(`#${folder}${num} #${prevImg.name}-icon p`).style.color = "#000"; // make the previously selected images text go back to normal
+        document.querySelector(`#${folder}${num} #${prevImg.name}-icon p`).style.background = ""; // set the previous images text background to nothing
       }
 
       prevImg = element; // change the previous image to the current image
     });
 
-    document.querySelector(`#gallery${num} #${name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
+    document.querySelector(`#${folder}${num} #${element.name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
       if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF
-        gamePitchWindow(getWindowTotal("game")); // open the game pitch window
+        gamePitchWindow(getWindowTotal("game-pitch")); // open the game pitch window
       } else {
-        imageWindow(element, getWindowTotal(name)) // otherwise open image window
+        imageWindow(element, getWindowTotal(element.name)) // otherwise open image window
       }
     });
 
-    document.querySelector(`#gallery${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`; // lists the number of images in the folder
+    document.querySelector(`#${folder}${num} .object-amt`).innerHTML = `<p>${++amt} Object(s)</p>`; // lists the number of images in the folder
   });
 }
 
-export const galleryWindow = (num, folder) => { // creates gallery window - folder determines the image filter
-  document.getElementById("windows").insertAdjacentHTML("beforeend", galleryHTML(num, folder));
-  gallerySetUp(num, folder);
-  windowSetUp(`gallery${num}`, "gallery");
+export const galleryWindow = (num, folder, gallery) => { // creates gallery window - folder determines the image filter
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(folder, null, num));
+  gallerySetUp(num, folder, gallery);
+  windowSetUp(`${folder}${num}`, folder);
 }
 
 export const aboutWindow = (num) => { // creates about window
-  document.getElementById("windows").insertAdjacentHTML("beforeend", aboutHTML(num));
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("about", null, num));
   windowSetUp(`about${num}`, "about");
 }
 
 export const minesweeperWindow = (num) => { // creates minesweeper window
-  document.getElementById("windows").insertAdjacentHTML("beforeend", minesweeperHTML(num));
+  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("minesweeper", null, num));
   startMs(num);
   windowSetUp(`minesweeper${num}`, "minesweeper");
 }

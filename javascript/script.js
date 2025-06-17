@@ -2,7 +2,6 @@ import { homeWindow } from "./windows.js";
 import { aboutWindow } from "./windows.js";
 import { galleryWindow } from "./windows.js"; 
 import { minesweeperWindow } from "./windows.js"
-import { draggableElement } from "./windows.js"
 import { convertGallery } from "./data.js"
 
 window.order = []; // array to check zindex placement for windows
@@ -32,6 +31,44 @@ export const getWindowTotal = (name) => {
   } else {
     return filteredArray.length + 1; // there are some so the id will be one more than the current amount
   }
+};
+
+const draggableIcon = (icon) => {
+  document.getElementById(icon).addEventListener("mousedown", (e) => {
+    let initialX = e.clientX;
+    let initialY = e.clientY;
+ 
+    const moveElement = (e) => { // allow windows and icons to move
+      let currentX = e.clientX;
+      let currentY = e.clientY;
+      document.getElementById(icon).style.left = document.getElementById(icon).offsetLeft + (currentX - initialX) + "px";
+      document.getElementById(icon).style.top = document.getElementById(icon).offsetTop + (currentY - initialY) + "px";
+      initialX = currentX;
+      initialY = currentY;
+    };
+
+    const stopElement = () => { // stops the element from moving after mouse up
+      document.removeEventListener("mousemove", moveElement);
+      document.removeEventListener("mouseup", stopElement);
+
+      if (icon != "recycle-icon") { // if an icon was being moved and that icon was not the recycling bin
+        const rect = document.querySelector(`#${icon} img`).getBoundingClientRect();
+        const recycle = document.querySelector("#recycle-icon img").getBoundingClientRect();
+
+        let overlap = !(rect.right < recycle.left + 10 || 
+                      10 + rect.left > recycle.right || 
+                      rect.bottom < recycle.top + 10 || 
+                      10 + rect.top > recycle.bottom)
+    
+        if (overlap) { // if the icon overlaps with the recycle
+          document.getElementById(icon).remove(); // remove that icon
+        }
+      }
+    };
+
+    document.addEventListener("mousemove", moveElement);
+    document.addEventListener("mouseup", stopElement);
+  });
 };
 
 document.getElementById("home-icon").addEventListener("dblclick", () => {
@@ -83,7 +120,7 @@ const setUpIcons = () => {
     element.e.style.left = `${element.left}px`; // setting the icons position back to its original position when its position was flex
     element.e.style.top = `${element.top}px`; // setting the icons position back to its original position when its position was flex
 
-    draggableElement(element.e.id);
+    draggableIcon(element.e.id);
   });
 }
 

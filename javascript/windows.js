@@ -3,188 +3,183 @@ import { startMs } from "./minesweeper.js"
   import { stopTime } from "./minesweeper.js"
 import { getWindowTotal } from "./script.js"; 
 
-const windowDetails = new Map(); // [windowname, {moveable: boolean, winHeight: valuepx, winWidth: valuepx}]
+class Window {
+  constructor(type, num) {
+    this.name = `${type}${num}`
+    this.type = type;
+    this.num = num;
+    this.moveable = null;
+    this.winHeight = null;
+    this.winWidth = null;
 
-// dynamically changes zindex of windows based off of what was clicked most recently
-const bringToTop = (name) => {
-  if (order.indexOf(name) != -1) {
-    let filteredArray = order.filter((e) => e != name); // if its open remove it  from the order index
-    order = filteredArray;
+    document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(type, null, num));
+
+    this.container = document.getElementById(`${type}${num}`);
+
+    this.windowSetUp(); // add functions for window
   }
 
-  order.unshift(name); // make window the first element in order
-
-  order.forEach((element) => {
-    document.getElementById(`${element}tab`).style.backgroundColor = name == element ? "#e8e8e8" : "#bfbfbf";
-
-    let placement = order.length - order.indexOf(element); // go through order and make the zindex of each window match its placement in reverse (ie 0 = length, 1 = length - 1)
-    document.getElementById(element).style.zIndex = placement;
-  });
-
-  document.getElementById("footer").style.zIndex = order.length + 1; // give the footer the highest zindex
-};
-
-export const draggableElement = (name) => {
-  document.getElementById(name).addEventListener("mousedown", (e) => {
-    let initialX = e.clientX;
-    let initialY = e.clientY;
-
-    if (name.indexOf("icon") > 0 && windowDetails.get(name) == null) {
-      windowDetails.set(name, {moveable: true, winHeight: document.getElementById(name).offsetHeight + "px", winWidth: document.getElementById(name).offsetWidth + "px"}); // add icon to details map (for moving the desktop icons)
-    }
- 
-    const moveElement = (e) => { // allow windows and icons to move
-      if (windowDetails.get(name).moveable) {
-        let currentX = e.clientX;
-        let currentY = e.clientY;
-        document.getElementById(name).style.left = document.getElementById(name).offsetLeft + (currentX - initialX) + "px";
-        document.getElementById(name).style.top = document.getElementById(name).offsetTop + (currentY - initialY) + "px";
-        initialX = currentX;
-        initialY = currentY;
-      }
-    };
-
-    const stopElement = () => { // stops the element from moving after mouse up
-      document.removeEventListener("mousemove", moveElement);
-      document.removeEventListener("mouseup", stopElement);
-
-      if (name != "recycle-icon" && name.indexOf("icon") > 0) { // if an icon was being moved and that icon was not the recycling bin
-        const rect = document.querySelector(`#${name} img`).getBoundingClientRect();
-        const recycle = document.querySelector("#recycle-icon img").getBoundingClientRect();
-
-        let overlap = !(rect.right < recycle.left + 10 || 
-                      10 + rect.left > recycle.right || 
-                      rect.bottom < recycle.top + 10 || 
-                      10 + rect.top > recycle.bottom)
-    
-        if (overlap) { // if the icon overlaps with the recycle
-          document.getElementById(name).remove(); // remove that icon
+  draggableElement = () => {
+    this.container.addEventListener("mousedown", (e) => {
+      let initialX = e.clientX;
+      let initialY = e.clientY;
+   
+      const moveElement = (e) => { // allow windows and icons to move
+        if (this.moveable == true) {
+          let currentX = e.clientX;
+          let currentY = e.clientY;
+          this.container.style.left = this.container.offsetLeft + (currentX - initialX) + "px";
+          this.container.style.top = this.container.offsetTop + (currentY - initialY) + "px";
+          initialX = currentX;
+          initialY = currentY;
         }
-      }
-    };
+      };
+  
+      const stopElement = () => { // stops the element from moving after mouse up
+        document.removeEventListener("mousemove", moveElement);
+        document.removeEventListener("mouseup", stopElement);
+      };
+  
+      document.addEventListener("mousemove", moveElement);
+      document.addEventListener("mouseup", stopElement);
+    });
+  };
 
-    document.addEventListener("mousemove", moveElement);
-    document.addEventListener("mouseup", stopElement);
-  });
-};
+  // seperated as its own function some of the windows can be maximized on open
+  maximize = () => {
+    this.container.style.height = `100%`;
+    this.container.style.width = "100%";
+    this.container.style.top = "0";
+    this.container.style.left = "0";
+    this.container.style.overflow = "hidden";
 
-// add element to the task bar at the bottom of the page
-const addToTaskBar = (name, type) => {
-  let url = `<img src="./assets/icons/${type}.png" alt="Image Broken" />`;
+    document.querySelector(`#${this.name}-topbar`).style.top = "0";
+    document.querySelector(`#${this.name}-topbar`).style.width = "100%";
 
-  if (type.indexOf(".") > 0) { // if an image window is being added to the task bar
-    let fileName = type 
+    this.moveable = false;
 
-    if (type.indexOf("gif") > 0) {
-      fileName = type.substring(0, type.indexOf("gif")) + "jpg" // handle thumbnails for gifs
-    }
+    // windowDetails.set(name, {moveable: false, winHeight: windowDetails.get(name).winHeight, winWidth: windowDetails.get(name).winWidth}); // the window cannot move in fullscreen mode
 
-    url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`; // url for taskbar thumbnail
-  } else if (type == "traditional" || type == "digital" || type == "figure" || type == "game") {
-    url = `<img src="./assets/icons/gallery.png" alt="Image Broken" />`;
+    document.getElementById(`${this.name}-max`).style.display = "none";
+    document.getElementById(`${this.name}-min`).style.display = "block";
   }
 
-  let newTab = `<div class="tabs" id="${name}tab">
-                  ${url}
-                  <p>${type.charAt(0).toUpperCase()}${type.substring(1)}</p>
-                </div>`;
-
-  document.getElementById("window-tabs").insertAdjacentHTML("beforeend", newTab);
-
-  document.getElementById(`${name}tab`).addEventListener("click", () => {
-    bringToTop(name); // clicking on a tab brings its window to the top of the z axis
-
-    if (document.getElementById(name).style.display === "none") {
-      document.getElementById(name).style.display = "block"; // if the window is in the tray get it out of the tray
-    }
-  });
-};
-
-// seperated as its own function some of the windows can be maximized on open
-const maximize = (name) => {
-  document.getElementById(name).style.height = `100%`;
-  console.log(document.getElementById(name).offsetHeight);
-  document.getElementById(name).style.width = "100%";
-  document.getElementById(name).style.top = "0";
-  document.getElementById(name).style.left = "0";
-  document.getElementById(name).style.overflow = "hidden";
-
-  document.querySelector(`#${name}-topbar`).style.top = "0";
-  document.querySelector(`#${name}-topbar`).style.width = "100%";
-
-  windowDetails.set(name, {moveable: false, winHeight: windowDetails.get(name).winHeight, winWidth: windowDetails.get(name).winWidth}); // the window cannot move in fullscreen mode
-
-  document.getElementById(`${name}-max`).style.display = "none";
-  document.getElementById(`${name}-min`).style.display = "block";
-}
-
-const windowSetUp = (name, type) => {
-  draggableElement(name); // make the window moveable
-
-  windowDetails.set(name, {moveable: true, winHeight: document.getElementById(name).offsetHeight + "px", winWidth: document.getElementById(name).offsetWidth + "px"}); // add window to details map
-
-  document.getElementById(name).addEventListener("mousedown", () => {
-    bringToTop(name); // bring to top if the window is clicked on
-  });
-
-  addToTaskBar(name, type); // add icon to task bar
-
-  // home is not included in these options as it is just meant as a notice, theres no need for the user to maximize or minimize it
-  if (type != "home") {
-    // adds functionality to the maximize button (not offered for minesweeper or images)
-    if (type != "minesweeper" && type.indexOf(".") == -1) {
-      document.getElementById(`${name}-max`).addEventListener("click", () => {
-        maximize(name);
+  windowSetUp = () => {
+    this.draggableElement(); // make the window moveable
+  
+    this.moveable = true;
+    this.winHeight = this.container.offsetHeight + "px";
+    this.winWidth = this.container.offsetWidth + "px";
+  
+    this.container.addEventListener("mousedown", () => {
+      this.bringToTop(); // bring to top if the window is clicked on
+    });
+  
+    this.addToTaskBar(); // add icon to task bar
+  
+    // home is not included in these options as it is just meant as a notice, theres no need for the user to maximize or minimize it
+    if (this.type != "home") {
+      // adds functionality to the maximize button (not offered for minesweeper or images)
+      if (this.type != "minesweeper" && this.type.indexOf(".") == -1) {
+        document.getElementById(`${this.name}-max`).addEventListener("click", () => {
+          this.maximize();
+        });
+      }
+  
+      // adds functionality to the minimize button
+      document.getElementById(`${this.name}-min`).addEventListener("click", () => {
+        this.container.style.height = this.winHeight;
+        this.container.style.width = this.winWidth;
+  
+        this.container.style.top = "";
+        this.container.style.left = "";
+        this.container.style.overflow = "";
+  
+        document.querySelector(`#${this.name}-topbar`).style.top = "0.1%";
+        document.querySelector(`#${this.name}-topbar`).style.width = "100%";
+  
+        this.moveable = true;
+        
+        document.getElementById(`${this.name}-max`).style.display = "block";
+        document.getElementById(`${this.name}-min`).style.display = "none";
+      });
+  
+      // adds functionality to the tray button
+      document.getElementById(`${this.name}-tray`).addEventListener("click", () => {
+        this.container.style.display = "none";
+        document.getElementById(`${this.name}tab`).style.backgroundColor = "#bfbfbf";
       });
     }
-
-    // adds functionality to the minimize button
-    document.getElementById(`${name}-min`).addEventListener("click", () => {
-      document.getElementById(name).style.height = windowDetails.get(name).winHeight;
-      document.getElementById(name).style.width = windowDetails.get(name).winWidth;
-
-      document.getElementById(name).style.top = "";
-      document.getElementById(name).style.left = "";
-      document.getElementById(name).style.overflow = "";
-
-      document.querySelector(`#${name}-topbar`).style.top = "0.1%";
-      document.querySelector(`#${name}-topbar`).style.width = "100%";
-
-      windowDetails.set(name, {moveable: true, winHeight: windowDetails.get(name).winHeight, winWidth: windowDetails.get(name).winWidth});
-
-      document.getElementById(`${name}-max`).style.display = "block";
-      document.getElementById(`${name}-min`).style.display = "none";
+  
+    // adds functionality to the exit button
+    document.getElementById(`${this.name}-exit`).addEventListener("click", () => {
+      document.getElementById("windows").removeChild(this.container);
+  
+      document.getElementById("window-tabs").removeChild(document.getElementById(`${this.name}tab`));
+  
+      let filteredArray = order.filter((e) => e != this.name); // remove window from order array
+      order = filteredArray;
+  
+      if (this.type == "minesweeper") {
+        stopTime()
+      }
     });
+  
+    this.bringToTop(); // bring to top and add window to the order array
+  };
 
-    // adds functionality to the tray button
-    document.getElementById(`${name}-tray`).addEventListener("click", () => {
-      document.getElementById(name).style.display = "none";
-      document.getElementById(`${name}tab`).style.backgroundColor = "#bfbfbf";
+  bringToTop = () => {
+    if (order.indexOf(this.name) != -1) {
+      let filteredArray = order.filter((e) => e != this.name); // if its open remove it  from the order index
+      order = filteredArray;
+    }
+  
+    order.unshift(this.name); // make window the first element in order
+  
+    order.forEach((element) => {
+      document.getElementById(`${element}tab`).style.backgroundColor = this.name == element ? "#e8e8e8" : "#bfbfbf";
+  
+      let placement = order.length - order.indexOf(element); // go through order and make the zindex of each window match its placement in reverse (ie 0 = length, 1 = length - 1)
+      document.getElementById(element).style.zIndex = placement;
     });
-  }
+  
+    document.getElementById("footer").style.zIndex = order.length + 1; // give the footer the highest zindex
+  };
 
-  // adds functionality to the exit button
-  document.getElementById(`${name}-exit`).addEventListener("click", () => {
-    document.getElementById("windows").removeChild(document.getElementById(name));
+  // add element to the task bar at the bottom of the page
+  addToTaskBar = () => {
+    let url = `<img src="./assets/icons/${this.type}.png" alt="Image Broken" />`;
 
-    document.getElementById("window-tabs").removeChild(document.getElementById(`${name}tab`));
+    if (this.type.indexOf(".") > 0) { // if an image window is being added to the task bar
+      let fileName = this.type 
 
-    let filteredArray = order.filter((e) => e != name); // remove window from order array
-    order = filteredArray;
+      if (this.type.indexOf("gif") > 0) {
+        fileName = this.type.substring(0, this.type.indexOf("gif")) + "jpg" // handle thumbnails for gifs
+      }
 
-    if (type == "minesweeper") {
-      stopTime()
+      url = `<img src="./assets/gallery/thumbnails/TB${fileName}" alt="Image Broken" />`; // url for taskbar thumbnail
+    } else if (this.type == "traditional" || this.type == "digital" || this.type == "figure" || this.type == "game") {
+      url = `<img src="./assets/icons/gallery.png" alt="Image Broken" />`;
     }
 
-    windowDetails.delete(name); // remove window from movement array
-  });
+    let newTab = `<div class="tabs" id="${this.name}tab">
+                    ${url}
+                    <p>${this.type.charAt(0).toUpperCase()}${this.type.substring(1)}</p>
+                  </div>`;
 
-  bringToTop(name); // bring to top and add window to the order array
-};
+    document.getElementById("window-tabs").insertAdjacentHTML("beforeend", newTab);
 
-export const homeWindow = (num) => {
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("home", null, num));
+    document.getElementById(`${this.name}tab`).addEventListener("click", () => {
+      this.bringToTop(); // clicking on a tab brings its window to the top of the z axis
 
+      if (this.container.style.display === "none") {
+        this.container.style.display = "block"; // if the window is in the tray get it out of the tray
+      }
+    });
+  };
+}
+
+const setUpHomeWindow = (num) => {
   if (popUp == true) {
     document.querySelector(`#home${num} .home-footer .icon`).innerHTML = `<i class="bx bx-checkbox-checked home-popup"></i>`; // check check box
   } else {
@@ -208,8 +203,11 @@ export const homeWindow = (num) => {
       });
     }
   });
-  
-  windowSetUp(`home${num}`, "home"); // add functions for window
+}
+
+export const homeWindow = (num) => {
+  let homeObject = new Window("home", num);
+  setUpHomeWindow(num);
 };
 
 export const imageWindow = (image, num) => { // window showing just an image
@@ -270,18 +268,15 @@ const gallerySetUp = (num, folder, gallery) => { // setting up the images in the
 }
 
 export const galleryWindow = (num, folder, gallery) => { // creates gallery window - folder determines the image filter
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml(folder, null, num));
+  let galleryObject = new Window(folder, num);
   gallerySetUp(num, folder, gallery);
-  windowSetUp(`${folder}${num}`, folder);
 }
 
 export const aboutWindow = (num) => { // creates about window
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("about", null, num));
-  windowSetUp(`about${num}`, "about");
+  let aboutObject = new Window("about", num);
 }
 
 export const minesweeperWindow = (num) => { // creates minesweeper window
-  document.getElementById("windows").insertAdjacentHTML("beforeend", getHtml("minesweeper", null, num));
+  let msObject = new Window("minesweeper", num);
   startMs(num);
-  windowSetUp(`minesweeper${num}`, "minesweeper");
 }

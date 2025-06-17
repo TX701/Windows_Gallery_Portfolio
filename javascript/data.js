@@ -17,7 +17,7 @@ export const convertGallery = () => {
   galleryData.forEach(element => {
     gallery.push(new Piece(element.description, element.file));
   });
-  console.log(gallery);
+
   return gallery;
 }
 
@@ -163,30 +163,22 @@ let galleryData = [
 export const getHtml = (name, image, num) => {
   switch (name) {
     case "home":
-      console.log(`home html`);
       return homeHTML(num);
     case "about":
-        console.log(`about html`);
         return aboutHTML(num);
     case "minesweeper":
-        console.log(`minesweeper html`);
         return minesweeperHTML(num);
-    case "game":
-      console.log(`game html`);
-      return galleryHTML(name, num);
     case "game-pitch":
       return gamePitchHTML(num);
+    case "game":
+        return galleryHTML(name, num);
     case "digital":
-      console.log(`digital html`);
       return galleryHTML(name, num);
     case "traditional":
-      console.log(`traditional html`);
       return galleryHTML(name, num);
     case "figure":
-      console.log(`figure html`);
       return galleryHTML(name, num); 
     default:
-      console.log(`image html`);
       return imageHTML(name, image, num);
   }
 }

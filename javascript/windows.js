@@ -1,8 +1,8 @@
 import { getHtml } from "./data.js";
 import { startMs } from "./minesweeper.js"
   import { stopTime } from "./minesweeper.js"
-import { getWindowTotal } from "./script.js"; 
 import { convertGallery } from "./data.js"
+import { getWindowTotal } from "./script.js"
 
 let gallery = convertGallery();
 
@@ -249,9 +249,9 @@ const gallerySetUp = (folder, num) => { // setting up the images in the gallerie
 
     document.querySelector(`#${folder}${num} #${element.name}-icon`).addEventListener("dblclick", (e) => { // if the user double clicks on an icon in the gallery folder
       if (e.explicitOriginalTarget.src.indexOf("Game_Pitch") > -1) { // if the icon is for the game pitch PDF
-        let imageObject = new Window(image.file, num); // open the game pitch window
+        let pitchObject = new Window("game-pitch", getWindowTotal("game-pitch"));
       } else {
-        let pitchObject = new Window("game-pitch", num);
+        let imageObject = new Window(element.file, getWindowTotal(element.file)); // open the game pitch window
       }
     });
 

@@ -1,11 +1,7 @@
-import { aboutWindow } from "./windows.js";
-import { galleryWindow } from "./windows.js"; 
-import { minesweeperWindow } from "./windows.js"
 import { Window } from "./windows.js";
 
 window.order = []; // array to check zindex placement for windows
 window.popUp = ""; // a cookie that determines if the user sees the home screen on website launch
-let gallery = []
 
 class Icon {
   constructor(container) {

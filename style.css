@@ -196,7 +196,8 @@
 
   position: absolute;
 
-  /* background-image: url(./assets/welcome.png); */
+  color: var(--text);
+  background-image: url(./assets/welcome.png);
   background-size: cover;
 }
 
@@ -220,6 +221,8 @@
   align-self: baseline;
   margin-top: 2rem;
   margin-bottom: 1rem;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
 }
 
 .home .home-footer {
@@ -937,6 +940,26 @@
 
     padding: 1rem;
     gap: 2rem;
+  }
+
+  #notice .wrapper button {
+    display: flex;
+    align-items: center;
+  
+    border-top-color: var(--window-bottom-right);
+    border-left-color: var(--window-top-left);
+    border-right-color: var(--window-top-left);
+    border-bottom-color: var(--window-bottom-right);
+    border-width: 0.15rem;
+    border-style: outset;
+  
+    padding: 0.2rem;
+  
+    cursor: url("./assets/CursorP.cur"), auto;
+  }
+
+  #notice .wrapper a {
+    text-decoration: none;
   }
 
   #notice .wrapper img {

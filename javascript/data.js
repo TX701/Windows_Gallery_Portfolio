@@ -196,7 +196,7 @@ const homeHTML = (num) => { // creates HTML for home page- each new instance wil
                 </div>
 
                 <div class="home-content">
-                <h1>Hi</h1>
+                <h1>WELCOME</h1>
                 </div>
                 <div class="home-footer">
                     <div class="icon"></div>
